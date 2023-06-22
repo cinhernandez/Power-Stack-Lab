@@ -60,7 +60,7 @@ with app.app_context():
             sets = fake.random_int(min=1, max=5)
             reps = fake.random_int(min=5, max=10)
             weight = fake.random_int(min=5, max=1001)
-            compound_training = CompoundTraining(sets=sets, reps=reps, weight=weight, compound_lift_id=compound.id)
+            compound_training = CompoundTraining(sets=sets, reps=reps, weight=weight, compound_lift_id=compound.id, training_program_id=training_program.id)
             db.session.add(compound_training)
             db.session.commit()
 
@@ -82,7 +82,7 @@ with app.app_context():
             sets = fake.random_int(min=3, max=5)
             reps = fake.random_int(min=6, max=10)
             weight = fake.random_int(min=5, max=120)
-            accessory_training = AccessoryTraining(sets=sets, reps=reps, weight=weight, accessory_id=accessory.id)
+            accessory_training = AccessoryTraining(sets=sets, reps=reps, weight=weight, accessory_id=accessory.id, training_program_id=training_program.id)
             db.session.add(accessory_training)
             db.session.commit()
 

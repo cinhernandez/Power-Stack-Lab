@@ -19,23 +19,51 @@ def index():
     return 'Power Stack Lab'
 
 
-class MaxLiftsList(Resource):
+
+class ProgramsList(Resource):
     def get(self):
-        max_lifts = MaxLift.query.all()
-        return jsonify([max_lift.to_dict() for max_lift in max_lifts])
+        programs = TrainingProgram.query.all()
+        return jsonify([program.to_dict() for program in programs])
 
-api.add_resource(MaxLiftsList, '/max_lifts')
+api.add_resource(ProgramsList, '/programs')
 
-class MaxLiftsById(Resource):
+
+class ProgramDetailsById(Resource):
     def get(self, id):
-        max_lift = MaxLift.query.get(id)
-        if not max_lift:
-            return make_response(jsonify({'error': 'Not found'}), 404)
-        return jsonify(max_lift.to_dict())
+        program = TrainingProgram.query.get(id)
+        return jsonify(program.to_dict())
+api.add_resource(ProgramDetailsById, '/programs/<int:id>')
+
+class UsersList(Resource):
+    def get(self):
+        users = User.query.all()
+        return jsonify([user.to_dict() for user in users])
+api.add_resource(UsersList, '/users')
+
+class ProgramCreation(Resource):
+    def post(self):
+        data = request.get_json()
+        if not data:
+            return make_response(jsonify({'error': 'Invalid request data'}), 400)
+
+        name = data.get('name')
+        duration = data.get('duration')
+        frequency = data.get('frequency')
+
+        program = TrainingProgram(name=name, duration=duration, frequency=frequency)
+        db.session.add(program)
+        db.session.commit()
+
+        return make_response(jsonify({'message': 'Program created successfully'}), 201)
+
+api.add_resource(ProgramCreation, '/programs/create')
+
+class WorkoutSessionsTracker(Resource):
+    def get(self):
+        sessions = WorkoutSession.query.all()
+        return jsonify([session.to_dict() for session in sessions])
     
-api.add_resource(MaxLiftsById, '/max_lifts/<int:id>')
-
-
+api.add_resource(WorkoutSessionsTracker, '/workout_sessions')
 
 
 

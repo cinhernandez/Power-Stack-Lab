@@ -38,6 +38,8 @@ class User(db.Model, SerializerMixin):
     email = Column(String(255), unique=True, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False)
 
+    serialize_rules=('-max_lifts', '-workout_sessions')
+
     max_lifts = db.relationship('MaxLift', backref='user')
     training_programs = db.relationship('TrainingProgram', backref='user')
     workout_sessions = db.relationship('WorkoutSession', backref='user')
@@ -94,9 +96,14 @@ class TrainingProgram(db.Model, SerializerMixin):
     duration = Column(Integer, nullable=False)
     frequency = Column(Integer, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    
+   
+
+    serialize_rules = ('-user', '-workouts', 'compound_trainings', 'accessory_trainings',)
 
     workouts = db.relationship('WorkoutSession', backref='training_program')
-
+    compound_trainings = db.relationship('CompoundTraining', backref='training_program')
+    accessory_trainings = db.relationship('AccessoryTraining', backref='training_program')
 
 class Compound(db.Model, SerializerMixin):
     __tablename__ = 'compounds'
@@ -122,6 +129,9 @@ class CompoundTraining(db.Model, SerializerMixin):
     reps = Column(Integer, nullable=False)
     weight = Column(Integer, nullable=False)
     compound_lift_id = Column(Integer, ForeignKey('compounds.id'), nullable=False)
+    training_program_id = Column(Integer, ForeignKey('training_programs.id'), nullable=False)
+    
+    serialize_rules = ('-compound', '-training_program')
     
 class AccessoryTraining(db.Model, SerializerMixin):
     __tablename__ = 'accessory_trainings'
@@ -130,6 +140,9 @@ class AccessoryTraining(db.Model, SerializerMixin):
     reps = Column(Integer, nullable=False)
     weight = Column(Integer, nullable=False)
     accessory_id = Column(Integer, ForeignKey('accessories.id'), nullable=False)
+    training_program_id = Column(Integer, ForeignKey('training_programs.id'), nullable=False)
+    
+    serialize_rules = ('-accessory', '-training_program')
 
 class WorkoutSession(db.Model, SerializerMixin):
     __tablename__ = 'workout_sessions'
@@ -140,4 +153,4 @@ class WorkoutSession(db.Model, SerializerMixin):
     training_program_id = Column(Integer, ForeignKey('training_programs.id'), nullable=False)
     
     
-  
+    serialize_rules=('user' ,'training_program')
