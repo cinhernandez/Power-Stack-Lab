@@ -6,6 +6,9 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask_bcrypt import bcrypt   
+
+
 
 # import flask_bcrypt as bcrypt
 from faker import Faker

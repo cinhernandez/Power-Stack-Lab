@@ -4,13 +4,30 @@
 from flask import Flask, request, jsonify, make_response, session
 # Remote library imports
 from flask import request
+from flask_migrate import Migrate
 from flask_restful import Resource, Api
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from os import environ
+# from dotenv import load_dotenv
+from flask_bcrypt import Bcrypt
+from config import app, db, api
+import secrets
 
 # Local imports
 from config import app, db, api
 from models import db, User, MaxLift, TrainingProgram, WorkoutSession, Compound, Accessory, CompoundTraining, AccessoryTraining
 
+
+# load_dotenv('.env')
 # Views go here!
+bcrypt = Bcrypt() 
+
+
+
+migrate = Migrate(app, db)
+
+app.secret_key = environ.get('SECRET_KEY')
 
 api = Api(app)
 
@@ -32,6 +49,15 @@ class ProgramDetailsById(Resource):
     def get(self, id):
         program = TrainingProgram.query.get(id)
         return jsonify(program.to_dict())
+    
+    def delete(self, id):
+        program = TrainingProgram.query.get(id)
+        if not program:
+            return {'error': '404: Program not found'}, 404
+
+        db.session.delete(program)
+        db.session.commit()
+
 api.add_resource(ProgramDetailsById, '/programs/<int:id>')
 
 class UsersList(Resource):
@@ -62,6 +88,7 @@ class WorkoutSessionsTracker(Resource):
     def get(self):
         sessions = WorkoutSession.query.all()
         return jsonify([session.to_dict() for session in sessions])
+    
     
 api.add_resource(WorkoutSessionsTracker, '/workout_sessions')
 
