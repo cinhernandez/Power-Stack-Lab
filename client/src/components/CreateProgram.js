@@ -53,20 +53,20 @@ const handleCreateProgram = () => {
     }
  
   
-  if (typeof squatMax !== 'number' || squatMax <= 0) {
-      alert('Please enter a valid squatMax.');
-      return;
-    }
+  // if (typeof squatMax !== 'number' || squatMax <= 0) {
+  //     alert('Please enter a valid squatMax.');
+  //     return;
+  //   }
   
-  if (typeof benchMax !== 'number' || benchMax <= 0) {
-      alert('Please enter a valid benchMax.');
-      return;
-    }
+  // if (typeof benchMax !== 'number' || benchMax <= 0) {
+  //     alert('Please enter a valid benchMax.');
+  //     return;
+  //   }
   
-  if (typeof deadliftMax !== 'number' || deadliftMax <= 0) {
-      alert('Please enter a valid deadliftMax.');
-      return;
-    }
+  // if (typeof deadliftMax !== 'number' || deadliftMax <= 0) {
+  //     alert('Please enter a valid deadliftMax.');
+  //     return;
+  //   }
 
     const program = [];
     const initialIntensity = 60;  // Initial intensity as percentage of max
