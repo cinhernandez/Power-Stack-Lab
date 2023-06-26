@@ -1,5 +1,5 @@
 .env
-.secret_key.env
+.env
 db.env
 
 

@@ -41,7 +41,7 @@ class User(db.Model, SerializerMixin):
     email = Column(String(255), unique=True, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False)
 
-    serialize_rules=('-max_lifts', '-workout_sessions')
+    serialize_rules=('-max_lifts', '-workout_sessions', 'max_lifts')
 
     max_lifts = db.relationship('MaxLift', backref='user')
     training_programs = db.relationship('TrainingProgram', backref='user')
@@ -54,14 +54,14 @@ class User(db.Model, SerializerMixin):
             raise AssertionError('No username provided')
         if User.query.filter(User.username == username, User.id != self.id).first():
             raise AssertionError('Username is already in use')
-        if len(username) < 5 or len(username) > 20:
+        if len(username) < 3 or len(username) > 20:
             raise AssertionError('Username must be between 5 and 20 characters')
         return username
     
     
 
     def __rep__(self):
-        return '<User {self.username}>'
+        return f'<User {self.username}>'
     
     @property
     def password(self):
@@ -75,9 +75,9 @@ class User(db.Model, SerializerMixin):
         self._password_hash = hashed_password.decode('utf-8')
 
     def authenticate(self, password):
-        password_bytes = password.encode('utf-8')
-        hashed_password = bcrypt.hashpw(password_bytes, salt)
-        self._password_hash = hashed_password.decode('utf-8')
+        password_bytes = password.encode("utf-8")
+        hashed_password = self._password_hash.encode("utf-8")
+        return bcrypt.checkpw(password_bytes, hashed_password)
 
 
 class MaxLift(db.Model, SerializerMixin):
@@ -102,7 +102,7 @@ class TrainingProgram(db.Model, SerializerMixin):
     
    
 
-    serialize_rules = ('-user', '-workouts', 'compound_trainings', 'accessory_trainings',)
+    serialize_rules = ('-user', '-workouts', 'compound_trainings', '-accessory_trainings',)
 
     workouts = db.relationship('WorkoutSession', backref='training_program')
     compound_trainings = db.relationship('CompoundTraining', backref='training_program')

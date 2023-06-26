@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-function CreateProgram({onProgramCreated}) {
+function CreateProgram() {
     const[name, setName] = useState('');
     const[duration, setDuration] = useState('');
     const[frequency, setFrequency] = useState('');
@@ -9,43 +9,40 @@ function CreateProgram({onProgramCreated}) {
     const[deadliftMax, setDeadliftMax] = useState('');
   
 
-
-
-const handleNameChange = (e) => {
+  const handleNameChange = (e) => {
     setName(e.target.value);
   };
 
-const handleDurationChange = (e) => {
+  const handleDurationChange = (e) => {
     setDuration(e.target.value);
   };
 
-const handleFrequencyChange = (e) => {
+  const handleFrequencyChange = (e) => {
     setFrequency(e.target.value);
   };
 
-const handleSquatChange = (e) => {
+  const handleSquatChange = (e) => {
     setSquatMax(e.target.value);
   };
-const handleDeadliftChange = (e) => {
+  const handleDeadliftChange = (e) => {
     setDeadliftMax(e.target.value);
   };
-const handleBenchChange = (e) => {
+  const handleBenchChange = (e) => {
     setBenchMax(e.target.value);
   };
 
-const handleCreateProgram = () => {
-
-  const newProgram = {
-    name,
-    duration,
-    frequency,
-    squatMax,
-    benchMax,
-    deadliftMax,
-  };
+  const handleCreateProgram = () => {
+    const newProgram = {
+      name,
+      duration,
+      frequency,
+      squatMax,
+      benchMax,
+      deadliftMax,
+    };
 
     // Validation logic
-  for (const field in newProgram) {
+    for (const field in newProgram) {
       if (!newProgram[field]) {
         alert(`Please fill in the ${field}.`);
         return;
@@ -94,28 +91,30 @@ const handleCreateProgram = () => {
     newProgram.program = program;
   
 
-onProgramCreated(newProgram);
+    const event = new CustomEvent('programCreated', { detail: newProgram });
+    document.dispatchEvent(event);
 
-  // Clear the input fields
-setName('');
-setDuration('');
-setFrequency('');
-setSquatMax('');
-setDeadliftMax('');
-setBenchMax('');
-};
+    setName('');
+    setDuration('');
+    setFrequency('');
+    setSquatMax('');
+    setDeadliftMax('');
+    setBenchMax('');
+  };
 
 
 
+
+  
 return (
-  <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg">
+  <div className="w-full h-[90vh] top-[90px] bg-black ">
+  <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg  ">
   
     <h2 className="text-2xl font-bold mb-4 text-center text-indigo-500">Create Training Program</h2>
     <div className="mb-4 space-y-4">
       <div>
         <label htmlFor="name" className="block text-sm font-medium">Program Name:</label>
         <select
-          
           id="name"
           value={name}
           onChange={handleNameChange}
@@ -189,7 +188,7 @@ return (
     >
       Create Training Program
     </button>
-   
+  </div>
   </div>
 );
 }

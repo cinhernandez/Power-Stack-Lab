@@ -1,19 +1,13 @@
 import React, {useState} from 'react';
 import {AiOutlineMenu, AiOutlineClose} from 'react-icons/ai';
-import { NavLink, Link,  } from 'react-router-dom/cjs/react-router-dom.min';
+import {  NavLink, Link  } from 'react-router-dom';
 
 
 
-const NavBar = () => {
+const NavBar = ({isLoggedIn, HandleLogout}) => {
     const[nav, setNav] = useState(false);
-    const navLinks = [
-        {path: '/', name: 'Home'},
-        {path: '/programs/creation', name: 'Generate Training Program'},
-        {path: '/dashboard', name: 'Dashboard'},
-        {path: '/about', name: 'About'},
-        {path: '/login', name: 'Login'},
-        {path: '/signup', name: 'Sign Up'}
-    ]
+  
+
 
     const handleNav = () => {
         setNav(!nav)
@@ -23,38 +17,39 @@ const NavBar = () => {
         <div className='w-full h-[90px] bg-black'>
             <div className='max-w-[1240px] mx-auto px-4 flex justify-between items-center h-full'>
             <div>
+            <Link to='/'>
                 <h1 className='text-red-500'>PWR Stack Lab</h1>
+            </Link>
                 </div>
-                <div onClick={handleNav} className='hidden md:flex'>
+                <nav>
+                    <div className= 'navigation'>
                     <ul className='flex text-white items-center'>
-                        <li>Home</li>
-                        <NavLink to='/programs/creation'>
+                    <NavLink className='button' exact to='/programs/creation'>
                         <li>Generate Training Program</li>
-                        </NavLink>
+                    </NavLink>
+                    <NavLink className='button' exact to='/dashboard'>
                         <li>Dashboard</li>
+                    </NavLink>
+                    <NavLink className='button' to='/signup'>
+                        <li>Sign Up</li>
+                    </NavLink>
+                    <NavLink className='button' to='/login'>
+                        <li>Login</li>
+                    </NavLink>
+                    <NavLink className='button' to='/about'>
                         <li>About</li>
-                        <button className='ml-4'>Use PWR Stack Lab</button>
+                    </NavLink>
+                    <Link to='/signup'>
+                        <button className='ml-4'  onClick={handleNav}>Use PWR Stack Lab</button>
+                    </Link>
                     </ul>
-                </div>
-
-                <div onClick={handleNav} className='block md:hidden'>
-                        {nav ? <AiOutlineMenu size={30} className='text-white'/> : <AiOutlineClose size={30} className='text-white'/>}
-                
-                </div>
-
-                {/*mobile menu*/}
-                <div className={nav ? 'w-full bg-black text-white absolute top-[90px] left-0 flex justify-center text-center' : 
-                'absolute left-[-100%]'}>
-                    <ul>
-                        <li className='text-2xl'>Home</li>
-                        <li className='text-2xl'>Generate Training Program</li>
-                        <li className='text-2xl'>Dashboard</li>
-                        <li className='text-2xl'>About</li>
-                        <button className='m-8'>Use PWR Stack Lab</button>
-                    </ul>
+                    </div>
+                </nav>
                 </div>
             </div>
-        </div>
+            
+            
+      
     );
 }
 

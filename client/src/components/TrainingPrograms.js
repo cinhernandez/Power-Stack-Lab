@@ -4,8 +4,10 @@ import React, {useEffect, useState} from 'react';
 function TrainingPrograms() {
 
     const [trainingPrograms, setTrainingPrograms] = useState([]);
+    // const signedInUserId = 'your-user-id-here'
 
     useEffect(() => {
+    
         fetch('/programs')
             .then((response) => response.json())
             .then((data) => setTrainingPrograms(data));
@@ -29,16 +31,22 @@ function TrainingPrograms() {
       };
 
     return (
-        <div>
+      <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
+      <div className="mt-8 text-center">
+          <div className="mb-4">
             <h1>Training Programs</h1>
-            <p>Training Programs Page</p>
-            <ul>
+            
+            <div>
                 {trainingPrograms.map(trainingProgram => (
-                    <li key={trainingProgram.id}>
-                        {trainingProgram.name}
-                    </li>
+                    <div key={trainingProgram.id} className="bg-white rounded shadow p-4 m-4" >
+                        <h2 className="text-xl font-bold">{trainingProgram.name}</h2>
+                        <p className="text-gray-600 mb-2">{trainingProgram.duration}</p>
+                        <p className="text-gray-600 mb-2">{trainingProgram.frequency}</p>
+                    </div>
                 ))}
-            </ul>
+            </div>
+        </div>
+        </div>
         </div>
     )
 }

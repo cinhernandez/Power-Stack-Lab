@@ -1,31 +1,48 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import Hero from "./components/Hero";
-import About from "./components/About";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import CreateProgram from "./components/CreateProgram";
+import Dashboard from "./components/Dashboard";
+import About from "./components/About";
+import TrainingPrograms from "./components/TrainingPrograms";
 
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false); 
+  
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
-    <div>
-      <NavBar />
-      <Hero />
-      <About />
-      <Router>
+     <Router>
+      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout}/>
         <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login}/>
-          <Route exact path="/signup" component={SignUp}/>
-          <Route exact path="/about" component={About}/>
-          <Route exact path="/programs/creation" component={CreateProgram}/>
+          <Route exact path="/" component={Home}/>
+          <Route 
+                exact path="/login"
+                render={(props) => <Login {...props} setIsLoggedIn={setIsLoggedIn} />}
+            />
+          <Route path="/signup" component={SignUp}/>
+          <Route path="/programs" component={TrainingPrograms}/>
+          <Route path="/dashboard" component={Dashboard}/>
+
+{/*             
+            //     exact path="/dashboard"
+            //     render={(props) =>
+            //     isLoggedIn ? (
+            //         <Dashboard {...props} />
+            //     ) : (
+            //         <Redirect to="/login" />
+            //     )
+            //     } */}
+            
+          <Route path="/about" component={About}/>
         </Switch>
       </Router>
-    
-    </div>
   );
 }
 

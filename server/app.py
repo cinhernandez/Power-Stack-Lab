@@ -66,6 +66,10 @@ class UsersList(Resource):
         return jsonify([user.to_dict() for user in users])
 api.add_resource(UsersList, '/users')
 
+class UserDetailsById(Resource):
+    def get(self, id):
+        pass
+
 class ProgramCreation(Resource):
     def post(self):
         data = request.get_json()
@@ -93,7 +97,6 @@ class WorkoutSessionsTracker(Resource):
 api.add_resource(WorkoutSessionsTracker, '/workout_sessions')
 
 
-
 class Signup(Resource):
     def post(self):
         data = request.get_json()
@@ -101,14 +104,13 @@ class Signup(Resource):
             return make_response(jsonify({'error': 'Invalid request data'}), 400)
 
         password = data.get('password')
-        #hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
         user = User(username=data.get('username'), password=password, email=data.get('email'))
         user.created_at = datetime.now()
 
         db.session.add(user)
         db.session.commit()
-
+        
         session['user_id'] = user.id
 
         return make_response(jsonify({'message': 'User created successfully'}), 201)

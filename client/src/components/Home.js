@@ -1,25 +1,55 @@
 import React from 'react';
+import video from '../assets/video.mp4'
+import {VscComment, VscGraph, VscOrganization, VscHeartFilled  } from 'react-icons/vsc'
 
-function Home() {
-
-      return (
-        <div className="font-sans min-h-screen antialiased bg-gray-200 py-6 flex flex-col justify-center sm:py-12">
-          <div className="relative py-3 sm:max-w-xl mx-auto text-center">
-            <span className="text-2xl font-light">Welcome to our website!</span>
-            <div className="mt-4 bg-white shadow-md rounded-lg text-center">
-              <div className="container mx-auto flex justify-center">
-                <div className="px-6 py-4 bg-white rounded-md text-center">
-                  <h2 className="text-2xl font-semibold text-gray-800">About Us</h2>
-                  <p className="mt-2 text-gray-600">
-                    PWR.
-                  </p>
+const Home = () => {
+    return (
+        <div className="w-full h-[90vh] top-[90px]">
+            <video className= 'object-cover h-full w-full absolute -z-10' src={video} autoPlay loop muted  />
+            <div className='w-full h-[90%] flex flex-col justify-center items-center text-white px-4 text-center'>
+                <h1>Powerlifting</h1>
+                <h1 className='text-red-500 py-2'>Program Generator</h1>
+                <p className='text-xl py-4'>Ignite Your Potential: Unleash Your Power with our Powerlifting Generator!</p>
+                <div>
+                    <button>Get Started</button>
                 </div>
-              </div>
             </div>
-          </div>
+        
+
+        <div className= 'w-full  bg-black text-white text-center'>
+      <div className='max-w-[1240px] mx-auto px-4 py-16'>
+        <div>
+            <h1 className='py-4'>Empower Your Strength:</h1>
+            <p className='py-4 text-xl'> Fuel Your Powerlifting Journey</p>
         </div>
-      );
-    }
-    
+
+        <div className='grid sm:grid-cols-2 gap-4'>
+                <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
+                    <div className='bg-[red] inline-flex p-2 rounded-full'><VscComment size={40} /></div>
+                    <h3 className='text-xl font-bold py-4'>Take Notes</h3>
+                    <p>Track your weekly progress</p>
+                </div>
+                <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
+                    <div className='bg-[red] inline-flex p-2 rounded-full'><VscGraph size={40}/></div>
+                    <h3 className='text-xl font-bold py-4'>Weekly Chart</h3>
+                    <p>Progress reimagined</p>
+                </div>
+                <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
+                    <div className='bg-[red] inline-flex p-2 rounded-full'><VscOrganization size={40}/></div>
+                    <h3 className='text-xl font-bold py-4'>Community</h3>
+                    <p>You will have access to the powerlifting community</p>
+                </div>
+                <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
+                    <div className='bg-[red] inline-flex p-2 rounded-full'><VscHeartFilled size={40} /></div>
+                    <h3 className='text-xl font-bold py-4'>Favorites</h3>
+                    <p>Access to all previous programs</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+    )
+       
+}
     export default Home;
     
