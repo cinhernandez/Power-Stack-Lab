@@ -41,11 +41,13 @@ class User(db.Model, SerializerMixin):
     email = Column(String(255), unique=True, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False)
 
-    serialize_rules=('-max_lifts', '-workout_sessions', 'max_lifts')
+    serialize_rules=('-max_lifts', '-lifts')
 
     max_lifts = db.relationship('MaxLift', backref='user')
-    training_programs = db.relationship('TrainingProgram', backref='user')
-    workout_sessions = db.relationship('WorkoutSession', backref='user')
+    lifts = db.relationship('Lift', backref='user')
+    squat_max = association_proxy('max_lifts', 'squat_max')
+    bench_max = association_proxy('max_lifts', 'bench_max')
+    deadlift_max = association_proxy('max_lifts', 'deadlift_max')
 
 
     @validates('username')
@@ -91,69 +93,25 @@ class MaxLift(db.Model, SerializerMixin):
 
   
 
-class TrainingProgram(db.Model, SerializerMixin):
-    __tablename__ = 'training_programs'
+class Lift(db.Model, SerializerMixin):
+    __tablename__ = 'lifts'
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    duration = Column(Integer, nullable=False)
-    frequency = Column(Integer, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     
+    serialize_rules=('-sets', '-user')
+    
+    sets = db.relationship('LiftSet', backref='lifts')
+   
    
 
-    serialize_rules = ('-user', '-workouts', 'compound_trainings', '-accessory_trainings',)
-
-    workouts = db.relationship('WorkoutSession', backref='training_program')
-    compound_trainings = db.relationship('CompoundTraining', backref='training_program')
-    accessory_trainings = db.relationship('AccessoryTraining', backref='training_program')
-
-class Compound(db.Model, SerializerMixin):
-    __tablename__ = 'compounds'
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-
-    compound_trainings = db.relationship('CompoundTraining', backref='compound')
-   
-
-
-class Accessory(db.Model, SerializerMixin):
-    __tablename__ = 'accessories'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(255), nullable=False)
-  
-    accessory_trainings = db.relationship('AccessoryTraining', backref='accessory')
-
-
-class CompoundTraining(db.Model, SerializerMixin):
-    __tablename__ = 'compound_trainings'
-    id = Column(Integer, primary_key=True)
-    sets = Column(Integer, nullable=False)
-    reps = Column(Integer, nullable=False)
-    weight = Column(Integer, nullable=False)
-    compound_lift_id = Column(Integer, ForeignKey('compounds.id'), nullable=False)
-    training_program_id = Column(Integer, ForeignKey('training_programs.id'), nullable=False)
-    
-    serialize_rules = ('-compound', '-training_program')
-    
-class AccessoryTraining(db.Model, SerializerMixin):
-    __tablename__ = 'accessory_trainings'
-    id = Column(Integer, primary_key=True)
-    sets = Column(Integer, nullable=False)
-    reps = Column(Integer, nullable=False)
-    weight = Column(Integer, nullable=False)
-    accessory_id = Column(Integer, ForeignKey('accessories.id'), nullable=False)
-    training_program_id = Column(Integer, ForeignKey('training_programs.id'), nullable=False)
-    
-    serialize_rules = ('-accessory', '-training_program')
-
-class WorkoutSession(db.Model, SerializerMixin):
-    __tablename__ = 'workout_sessions'
-    id = Column(Integer, primary_key=True)
-    date = Column(String, nullable=False)
-    notes = Column(String(250), nullable=False)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    training_program_id = Column(Integer, ForeignKey('training_programs.id'), nullable=False)
-    
-    
-    serialize_rules=('user' ,'training_program')
+class LiftSet(db.Model, SerializerMixin):
+    __tablename__ = 'lift_sets'
+    id=Column(Integer, primary_key=True)
+    set_number = Column(Integer, nullable=False)
+    weight_lifted = Column(Integer, nullable=False)
+    reps= Column(Integer, nullable=False)
+    notes = Column(String, nullable=True)
+    date = Column(DateTime, nullable=False)
+    lift_id = Column(Integer, ForeignKey('lifts.id'), nullable=False)

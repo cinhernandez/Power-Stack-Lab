@@ -30,14 +30,14 @@ const NavBar = ({isLoggedIn, HandleLogout}) => {
                     <NavLink className='button' exact to='/dashboard'>
                         <li>Dashboard</li>
                     </NavLink>
+                    <NavLink className='button' to='/max_lifts'>
+                        <li>Max Lifts</li>
+                    </NavLink>
                     <NavLink className='button' to='/signup'>
                         <li>Sign Up</li>
                     </NavLink>
                     <NavLink className='button' to='/login'>
                         <li>Login</li>
-                    </NavLink>
-                    <NavLink className='button' to='/about'>
-                        <li>About</li>
                     </NavLink>
                     <Link to='/signup'>
                         <button className='ml-4'  onClick={handleNav}>Use PWR Stack Lab</button>

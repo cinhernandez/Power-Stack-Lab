@@ -12,7 +12,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 # Local imports
 from app import app
-from models import db, User, MaxLift, TrainingProgram, WorkoutSession, Compound, Accessory, CompoundTraining, AccessoryTraining
+from models import db, User, MaxLift, Lift, LiftSet
 # fake = Faker()
 
 migrte = Migrate(app, db)
@@ -41,58 +41,23 @@ with app.app_context():
         db.session.add(max_lift)
         db.session.commit()
 
-        # Generating fake training_programs
-        name = 'Powerlifting'
-        duration = '{} weeks'.format(fake.random_int(min=8, max=12))
-        frequency = '{} days'.format(fake.random_int(min=3, max=5))
-        training_program = TrainingProgram(user_id=user.id, name=name, duration=duration, frequency=frequency)
-        db.session.add(training_program)
-        db.session.commit()
-
-        # Generate fake compound
-        compound_names = ['Squat', 'Bench', 'Deadlift']
-        for compound_name in compound_names:
-            compound = Compound(name = compound_name)
-            db.session.add(compound)
+        # Generating fake Lifts
+        lift_names = ['Squat', 'Bench', 'Deadlift']
+        for lift_name in lift_names:
+            lift = Lift(user_id=user.id, name=lift_name)
+            db.session.add(lift)
             db.session.commit()
-
-            # Generate fake compound_training
-            sets = fake.random_int(min=1, max=5)
-            reps = fake.random_int(min=5, max=10)
-            weight = fake.random_int(min=5, max=1001)
-            compound_training = CompoundTraining(sets=sets, reps=reps, weight=weight, compound_lift_id=compound.id, training_program_id=training_program.id)
-            db.session.add(compound_training)
-            db.session.commit()
-
-        # Generate fake accessory
         
-        workout_names = ['Romaian Deadlifts', 'Leg Extensions', 'Leg Curls', 'Walking Lunges', 'Blugarian Split Squats', 
-                         'Incline Dumbbell Bench Press', 'Dumbbell Flys', 'Dumbbell Bench Press', 'Pushups', 'Dips', 
-                         'Pullups', 'Lat Pulldowns', 'Seated Cable Rows', 'Dumbbell Rows', 'Barbell Rows', 
-                         'Dumbbell Shoulder Press', 'Dumbbell Lateral Raises', 'Dumbbell Front Raises', 'Dumbbell Rear Delt Flys', 'Face Pulls',
-                         'Barbell Curls', 'Dumbbell Curls', 'Hammer Curls', 'Tricep Pushdowns', 'Skull Crushers', 
-                         'Planks', 'Hanging Leg Raises', 'Cable Crunches', 'Ab Wheel Rollouts']
-        for workout_name in workout_names:
-            name = random.choice(workout_names)
-            accessory = Accessory(name = name)
-            db.session.add(accessory)    
-            db.session.commit()
-
-            # Generate fake accessory_training
-            sets = fake.random_int(min=3, max=5)
-            reps = fake.random_int(min=6, max=10)
-            weight = fake.random_int(min=5, max=120)
-            accessory_training = AccessoryTraining(sets=sets, reps=reps, weight=weight, accessory_id=accessory.id, training_program_id=training_program.id)
-            db.session.add(accessory_training)
-            db.session.commit()
-
-        # Generate fake workout_session
-        for _ in range(2):
-            notes= 'completed'
-            date = fake.date_this_year()
-            workout_session = WorkoutSession(user_id=user.id, training_program_id=training_program.id, notes= notes, date=date)
-            db.session.add(workout_session)
-            db.session.commit()
+    
+        # Generate lift_set
+        set_number = fake.random_int(min=3, max=5)
+        weight_lifted = fake.random_int(min=5, max=120)
+        reps = fake.random_int(min=6, max=10)
+        notes = 'completed'
+        date = fake.date_this_year()
+        lift_set = LiftSet(set_number=set_number, reps=reps, weight_lifted=weight_lifted, notes=notes, date=date, lift_id=lift.id)
+        db.session.add(lift_set)
+        db.session.commit()
 
 
 

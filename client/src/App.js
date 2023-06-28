@@ -4,10 +4,11 @@ import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import CreateProgram from "./components/CreateProgram";
+import FitnessForm from "./components/FitnessForm";
 import Dashboard from "./components/Dashboard";
 import About from "./components/About";
-import TrainingPrograms from "./components/TrainingPrograms";
+import MaxLift from "./components/MaxLift";
+
 
 
 function App() {
@@ -27,8 +28,10 @@ function App() {
                 render={(props) => <Login {...props} setIsLoggedIn={setIsLoggedIn} />}
             />
           <Route path="/signup" component={SignUp}/>
-          <Route path="/programs" component={TrainingPrograms}/>
+         
           <Route path="/dashboard" component={Dashboard}/>
+          <Route path="/max_lifts" component={MaxLift} />
+          
 
 {/*             
             //     exact path="/dashboard"
@@ -41,7 +44,9 @@ function App() {
             //     } */}
             
           <Route path="/about" component={About}/>
+          
         </Switch>
+        
       </Router>
   );
 }
