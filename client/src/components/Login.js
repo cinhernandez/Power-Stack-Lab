@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom"; 
 
 
 
-const Login = ({ setIsLoggedIn }) => { // Receive setIsLoggedIn function as a prop
+const Login = () => { 
   const history = useHistory();
   const [values, setValues] = useState({
     email: "",
@@ -32,6 +32,7 @@ const Login = ({ setIsLoggedIn }) => { // Receive setIsLoggedIn function as a pr
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
+        credentials: "include",
       })
         .then((response) => {
           console.log("Received response:", response);
@@ -105,7 +106,7 @@ const Login = ({ setIsLoggedIn }) => { // Receive setIsLoggedIn function as a pr
           <button 
             type="submit"
             disabled={isSubmitting}
-            className="w-full px-3 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none"
+            className="w-full px-3 py-2 text-white bg-red-500 rounded-md hover:bg-black focus:outline-none"
           >
             Login
           </button>

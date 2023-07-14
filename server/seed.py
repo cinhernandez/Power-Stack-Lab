@@ -12,7 +12,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 # Local imports
 from app import app
-from models import db, User, MaxLift, Lift, LiftSet
+from models import db, User, MaxLift, Post, LiftSet
 # fake = Faker()
 
 migrte = Migrate(app, db)
@@ -41,23 +41,29 @@ with app.app_context():
         db.session.add(max_lift)
         db.session.commit()
 
-        # Generating fake Lifts
-        lift_names = ['Squat', 'Bench', 'Deadlift']
-        for lift_name in lift_names:
-            lift = Lift(user_id=user.id, name=lift_name)
-            db.session.add(lift)
-            db.session.commit()
-        
-    
+      
         # Generate lift_set
+        lift_names = ['Squat', 'Bench', 'Deadlift']
+        
+        name= fake.random_element(elements=lift_names)
         set_number = fake.random_int(min=3, max=5)
         weight_lifted = fake.random_int(min=5, max=120)
         reps = fake.random_int(min=6, max=10)
         notes = 'completed'
         date = fake.date_this_year()
-        lift_set = LiftSet(set_number=set_number, reps=reps, weight_lifted=weight_lifted, notes=notes, date=date, lift_id=lift.id)
+        lift_set = LiftSet(name=name, set_number=set_number, reps=reps, weight_lifted=weight_lifted, notes=notes, date=date, user_id=user.id)
         db.session.add(lift_set)
         db.session.commit()
+        
+        
+        
+        title = "lifting"
+        body = fake.paragraph()
+        created_at = fake.date_time_between(start_date='-1y', end_date='now')
+        post = Post(title=title, body=body, created_at=created_at, user_id=user.id)
+        db.session.add(post)
+        db.session.commit()
+        
 
 
 

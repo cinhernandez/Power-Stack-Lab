@@ -1,34 +1,52 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useContext } from 'react';
+import { AppContext } from '../AppContext';
+
+
 
 
 
 const FitnessForm = () => {
-  const [exercise, setExercise] = useState('');
-  const [weightLifted, setWeightLifted] = useState('');
-  const [setNumber, setSetNumber] = useState('');
-  const [reps, setReps] = useState('');
-  const [notes, setNotes] = useState('');
+  const { name, setName, date, setDate, weightLifted, setWeightLifted, setNumber, setSetNumber, reps, setReps, notes, setNotes, setLifts } = useContext(AppContext);
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    // Create payload object with form data
-    const payload = {
-      exercise,
+  const handleCreate = () => {
+
+    const newLift = {
+      name,
       weight_lifted: parseFloat(weightLifted),
       set_number: parseInt(setNumber),
       reps: parseInt(reps),
       notes,
+      date
     };
 
+    fetch('/create/lift_sets', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newLift),
+    })
+    .then((res) => res.json())
+    .then((createdLift) => {
+        setLifts((prevLifts) => [...prevLifts, createdLift]);
+    })
+    .catch(err => console.log(err));
+        console.log('Error creating lift set');
+}
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    handleCreate();
+
+
       // Reset form fields
-      setExercise('');
-      setWeightLifted('');
-      setSetNumber('');
-      setReps('');
-      setNotes('');
+    setName('');
+    setWeightLifted('');
+    setSetNumber('');
+    setReps('');
+    setNotes('');
+    setDate('');
   
   };
 
@@ -38,15 +56,20 @@ const FitnessForm = () => {
     <h2 className="text-2xl font-bold mb-4 text-center text-black">Track Powerlifting Progress</h2>
     <div className="mb-4 space-y-4">
     <form onSubmit={handleSubmit}>
-      <label htmlFor="exercise" className="block text-sm font-medium">Exercise:</label>
-      <input
+      <label htmlFor="name" className="block text-sm font-medium">Exercise:</label>
+      <select
         type="text"
-        id="exercise"
-        value={exercise}
-        onChange={(e) => setExercise(e.target.value)}
+        id="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         required
         className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-      />
+      >
+        <option value="">Select an exercise</option>
+        <option value="squat">Squat</option>
+        <option value="bench_press">Bench Press</option>
+        <option value="deadlift">Deadlift</option>
+      </select>
 
       <label htmlFor="weightLifted" className="block text-sm font-medium">Weight Lifted:</label>
       <input
@@ -71,7 +94,7 @@ const FitnessForm = () => {
       <label htmlFor="reps" className="block text-sm font-medium">Reps:</label>
       <input
         type="text"
-        id="reps"
+        id="setReps"
         value={reps}
         onChange={(e) => setReps(e.target.value)}
         required
@@ -80,11 +103,22 @@ const FitnessForm = () => {
 
       <label htmlFor="notes" className="block text-sm font-medium">Notes:</label>
       <textarea
-        id="text"
+        type="text"
+        id="setNotes"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       ></textarea>
+
+      <label htmlFor="date" className="block text-sm font-medium">Date:</label>
+      <input
+        type="date"
+        id="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        required
+        className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
 
       <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Submit</button>
     </form>

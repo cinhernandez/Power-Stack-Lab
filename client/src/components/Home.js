@@ -3,6 +3,8 @@ import video from '../assets/video.mp4'
 import {VscComment, VscGraph, VscOrganization, VscHeartFilled  } from 'react-icons/vsc'
 
 const Home = () => {
+
+
     return (
         <div className="w-full h-[90vh] top-[90px]">
             <video className= 'object-cover h-full w-full absolute -z-10' src={video} autoPlay loop muted  />

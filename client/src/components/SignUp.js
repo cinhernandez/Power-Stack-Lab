@@ -26,27 +26,28 @@ const SignUp = () => {
     .required('Confirm Password is required'),
 });
 
-  const handleSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values) => {
+    formik.setSubmitting(true);
         fetch('/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
         body: JSON.stringify(values),
         })
         .then((response) => {
-            if (response.ok) {
+          if (response.ok) {
             console.log('Registration successful');
             history.push('/dashboard');
-            } else {
+          } else {
             console.log('Registration failed');
-            }
+          }
         })
         .catch((error) => {
             console.log('Error registration:', error);
         })
         .finally(() => {
-            setSubmitting(false);
+            formik.setSubmitting(false);
         });
    
   }
@@ -58,7 +59,7 @@ const SignUp = () => {
 
 return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
-    <form className="w-96 p-6 bg-white rounded-md shadow-md" onSubmit={handleSubmit}>
+    <form className="w-96 p-6 bg-white rounded-md shadow-md" onSubmit={formik.handleSubmit}>
     <h2 className="mb-6 text-2xl font-bold text-center"> Sign Up</h2>
         <div className="mb-4">
         <label htmlFor="username" className="block mb-2 font-semibold">
@@ -123,7 +124,7 @@ return (
             </div>
             <button
             type="submit"
-            className="w-full bg-indigo-500 text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
             disabled={formik.isSubmitting}>
             Sign Up
             </button>

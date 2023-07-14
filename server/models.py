@@ -41,13 +41,9 @@ class User(db.Model, SerializerMixin):
     email = Column(String(255), unique=True, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False)
 
-    serialize_rules=('-max_lifts', '-lifts')
-
-    max_lifts = db.relationship('MaxLift', backref='user')
-    lifts = db.relationship('Lift', backref='user')
-    squat_max = association_proxy('max_lifts', 'squat_max')
-    bench_max = association_proxy('max_lifts', 'bench_max')
-    deadlift_max = association_proxy('max_lifts', 'deadlift_max')
+    serialize_rules=('-lift_sets', '-max_lifts', '-posts')
+    
+  
 
 
     @validates('username')
@@ -91,27 +87,28 @@ class MaxLift(db.Model, SerializerMixin):
     deadlift_max = Column(Integer, nullable=False)
     date = Column(DateTime, nullable=False)
 
-  
-
-class Lift(db.Model, SerializerMixin):
-    __tablename__ = 'lifts'
-
-    id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    
-    serialize_rules=('-sets', '-user')
-    
-    sets = db.relationship('LiftSet', backref='lifts')
-   
-   
+    users = db.relationship('User', backref='max_lifts')
 
 class LiftSet(db.Model, SerializerMixin):
     __tablename__ = 'lift_sets'
     id=Column(Integer, primary_key=True)
+    name=Column(String, nullable=False)
     set_number = Column(Integer, nullable=False)
     weight_lifted = Column(Integer, nullable=False)
     reps= Column(Integer, nullable=False)
     notes = Column(String, nullable=True)
     date = Column(DateTime, nullable=False)
-    lift_id = Column(Integer, ForeignKey('lifts.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    
+    users = db.relationship('User', backref='lift_sets')
+    
+class Post(db.Model, SerializerMixin):
+    __tablename__ = 'posts'
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    body = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False)
+    
+    users = db.relationship('User', backref='posts')
+

@@ -16,7 +16,7 @@ import secrets
 
 # Local imports
 from config import app, db, api
-from models import db, User, MaxLift, Lift, LiftSet
+from models import db, User, MaxLift, Post, LiftSet
 
 # load_dotenv('.env')
 # Views go here!
@@ -52,6 +52,7 @@ class UserListById(Resource):
 
 api.add_resource(UserListById, '/users/<int:id>')
 
+
 class MaxLiftsList(Resource):
     def get(self):
         max_lifts = [max_lift.to_dict() for max_lift in MaxLift.query.all()]
@@ -61,22 +62,28 @@ api.add_resource(MaxLiftsList, '/max_lifts')
 
 
 
-app.route('/create/max_lifts', methods=['POST'])
-def create_maxlifts(self):
+@app.route('/create/max_lifts', methods=['POST'])
+def create_maxlifts():
     data = request.get_json()
-    if not data or 'date' not in data or 'squat_max' not in data or 'bench_max' not in data or 'deadlift_max' not in data or 'bench_max' not in data:
+    if not data or 'user_id' not in data or 'date' not in data or 'squat_max' not in data or 'bench_max' not in data or 'deadlift_max' not in data:
         return make_response(jsonify({'error': 'Invalid request data'}), 400)
+    try:
+        date = datetime.strptime(data['date'], '%m-%d-%y').date()  # Convert the date string to a datetime object
+    except ValueError:
+        return make_response(jsonify({'error': 'Invalid date format'}), 400)
 
-    maxlift_date = data['date']
-    maxlift_squat_max = data['squat_max']
-    maxlift_bench_max = data['bench_max']
-    maxlift_deadlift_max = data['deadlift_max']
-
-    max_lift = MaxLift(date=maxlift_date, squat_max=maxlift_squat_max, bench_max=maxlift_bench_max, deadlift_max=maxlift_deadlift_max)
+    max_lift = MaxLift(
+        user_id=data['user_id'],
+        date=date,
+        squat_max=data['squat_max'],
+        bench_max=data['bench_max'],
+        deadlift_max=data['deadlift_max']
+    )
+    
     db.session.add(max_lift)
     db.session.commit()
 
-    return make_response(jsonify(max_lift.to_dict()), 201)
+    return jsonify(max_lift.to_dict()), 201
 
 
 class MaxLiftListById(Resource):
@@ -85,27 +92,36 @@ class MaxLiftListById(Resource):
         if not max_lift:
             return {'error': '404: Max Lift not found'}, 404
         return make_response(jsonify(max_lift.to_dict()), 200) 
+    
+    def delete(self, id):
+        max_lift = MaxLift.query.get(id)
+        if not max_lift:
+            return {'error': '404: Max Lift not found'}, 404
+        
+        db.session.delete(max_lift)
+        db.session.commit()
+        return make_response({'message': 'Max Lift deleted successfully'}, 200)
 
 api.add_resource(MaxLiftListById, '/max_lifts/<int:id>')
 
 
-class liftsList(Resource):
+class LiftsSetList(Resource):
     def get(self):
-        lifts = [lift.to_dict() for lift in Lift.query.all()]
-        return make_response(jsonify(lifts), 200)
+        lift_sets = [lift_set.to_dict() for lift_set in LiftSet.query.all()]
+        return make_response(jsonify(lift_sets), 200)
     
-api.add_resource(liftsList, '/lifts')
+api.add_resource(LiftsSetList, '/lifts')
     
 
-class liftsListById(Resource):
+class LiftsSetById(Resource):
     def get(self, id):
-        lift = Lift.query.get(id)
+        lift = LiftSet.query.get(id)
         if not lift:
-            return make_response({'error': '404: Lift not found'}, 404)
-        return make_response(jsonify(lift.to_dict()), 200)
+            return {'error': '404: Max Lift not found'}, 404
+        return make_response(jsonify(lift.to_dict()), 200) 
     
     def delete(self, id):
-        lift = Lift.query.get(id)
+        lift = LiftSet.query.get(id)
         if not lift:
             return {'error': '404: Lift not found'}, 404
         
@@ -113,52 +129,64 @@ class liftsListById(Resource):
         db.session.commit()
         return make_response({'message': 'Lift deleted successfully'}, 200)
 
-api.add_resource(liftsListById, '/lifts/<int:id>')
+api.add_resource(LiftsSetById, '/lifts/<int:id>')
 
 
-class liftSetList(Resource):
-    def get(self):
-        lift_sets = [lift_set.to_dict() for lift_set in LiftSet.query.all()]
-        return make_response(jsonify(lift_sets), 200)
-
-api.add_resource(liftSetList, '/lift_sets')
-
-
-class liftSetListById(Resource):
-    def get(self, id):
-        lift_set = LiftSet.query.get(id)
-        if not lift_set:
-            return make_response({'error': '404: Lift Set not found'}, 404)
-        return {}
-
+@app.route('/create/lift_sets', methods=['POST'])
+def create_lift_set():
+    user_id = session.get('user_id')
+    user = User.query.filter_by(id=user_id).first()
     
-api.add_resource(liftSetListById, '/lift_sets/<int:id>')
+    if not user:
+        return {'message': 'Unauthorized'}, 401
+    
+    lift_set_data = request.get_json()
+
+    try: 
+        lift_set = LiftSet(
+            user_id=user_id,
+            name= lift_set_data['name'],
+            set_number=lift_set_data['set_number'],
+            weight_lifted=lift_set_data['weight_lifted'],
+            reps=lift_set_data['reps'],
+            notes=lift_set_data['notes'],
+            date=lift_set_data['date']
+        )
+        db.session.add(lift_set)
+        db.session.commit()
+        return lift_set.serialize(), 201
+
+    except Exception as e:
+        return {"message": f"An error occurred: {str(e)}"}, 500
+
+   
 
 
-@app.route('/track/liftset', methods=['POST'])
-def track_lift_set():
-   username = session.get('username')
-   exercise = request.form['exercise']
-   weight_lifted = float(request.form['weight_lifted'])
-   set_number = int(request.form['set_number'])
-   reps = int(request.form['reps'])
-   notes = request.form['notes'] 
-   
-   user = User.query.filter_by(username=username).first()
-   
-   if user:
-       lift = Lift(name=exercise, user=user)
-       db.session.add(lift)
-       db.session.commit()
-       
-       lift_set =LiftSet(set_number=set_number, weight_lifted=weight_lifted, reps=reps, notes=notes, lift=lift)
-       db.session.add(lift_set)
-       db.session.commit()
-       
-       return 'Fitness tracked successfully!'
-   else:
-       return 'User not found!'
+class PostsList(Resource):  
+    def get(self):
+        posts = [post.to_dict() for post in Post.query.all()]
+        return make_response(jsonify(posts), 200)
+    
+api.add_resource(PostsList, '/posts')
+
+
+class PostsListById(Resource):
+    def get(self, id):
+        post = Post.query.get(id)
+        if not post:
+            return {'error': '404: Post not found'}, 404
+        return make_response(jsonify(post.to_dict()), 200)
+    
+    def delete(self, id):
+        post = Post.query.get(id)
+        if not post:
+            return {'error': '404: Post not found'}, 404
         
+        db.session.delete(post)
+        db.session.commit()
+        return make_response({'message': 'Post deleted successfully'}, 200)
+
+api.add_resource(PostsListById, '/posts/<int:id>')
 
 
 
@@ -198,6 +226,7 @@ def login():
         return make_response(jsonify({'error': 'Invalid username or password'}), 401)
 
     session['username'] = user.username
+    session['user_id'] = user.id
 
     return make_response(jsonify({'message': 'Logged in successfully', 'user_id': user.id}), 200)
 
