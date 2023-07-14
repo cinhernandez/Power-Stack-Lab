@@ -1,10 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../AppContext';
 
-
-
-
-
 const FitnessForm = () => {
   const { name, setName, date, setDate, weightLifted, setWeightLifted, setNumber, setSetNumber, reps, setReps, notes, setNotes, setLifts } = useContext(AppContext);
 

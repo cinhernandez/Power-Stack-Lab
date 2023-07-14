@@ -85,7 +85,7 @@ class MaxLift(db.Model, SerializerMixin):
     squat_max = Column(Integer, nullable=False)
     bench_max = Column(Integer, nullable=False)
     deadlift_max = Column(Integer, nullable=False)
-    date = Column(DateTime, nullable=False)
+    date = Column(String, nullable=False)
 
     users = db.relationship('User', backref='max_lifts')
 
@@ -97,7 +97,7 @@ class LiftSet(db.Model, SerializerMixin):
     weight_lifted = Column(Integer, nullable=False)
     reps= Column(Integer, nullable=False)
     notes = Column(String, nullable=True)
-    date = Column(DateTime, nullable=False)
+    date = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     
     users = db.relationship('User', backref='lift_sets')

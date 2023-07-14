@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useContext} from "react";
+import { AppContext } from './AppContext';
 import { AppProvider } from './AppContext';
-import { useState, } from "react";
+
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Home from "./components/Home";
@@ -19,7 +20,7 @@ import FitnessForm from "./components/FitnessForm";
 
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const {isLoggedIn, setIsLoggedIn} = useContext(AppContext);
 
   // const [exercises, setExercises] = useState([]);
 
@@ -45,9 +46,9 @@ function App() {
 
 
   return (
-    <AppProvider>
+  
      <Router>
-      <NavBar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      <NavBar  handleLogout={handleLogout} />
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route 
@@ -69,7 +70,7 @@ function App() {
         
         </Switch>
       </Router>
-    </AppProvider>
+   
   );
 }
 

@@ -7,12 +7,14 @@ from flask import request
 from flask_migrate import Migrate
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+
 from os import environ
 # from dotenv import load_dotenv
 from flask_bcrypt import Bcrypt
 from config import app, db, api
 import secrets
+import logging
+from datetime import datetime
 
 # Local imports
 from config import app, db, api
@@ -22,6 +24,7 @@ from models import db, User, MaxLift, Post, LiftSet
 # Views go here!
 bcrypt = Bcrypt() 
 
+logging.basicConfig(level=logging.INFO)
 
 
 migrate = Migrate(app, db)
@@ -107,8 +110,14 @@ api.add_resource(MaxLiftListById, '/max_lifts/<int:id>')
 
 class LiftsSetList(Resource):
     def get(self):
-        lift_sets = [lift_set.to_dict() for lift_set in LiftSet.query.all()]
-        return make_response(jsonify(lift_sets), 200)
+        user_id = session.get('user_id')
+        user= User.query.filter_by(id=user_id).first()
+        if not user:
+            return {'message': 'Unauthorized'}, 401
+            
+        lifts = LiftSet.query.filter_by(user_id=user_id).all()
+        
+        return jsonify([lift.serialize() for lift in lifts]), 200
     
 api.add_resource(LiftsSetList, '/lifts')
     
@@ -135,12 +144,17 @@ api.add_resource(LiftsSetById, '/lifts/<int:id>')
 @app.route('/create/lift_sets', methods=['POST'])
 def create_lift_set():
     user_id = session.get('user_id')
+    
+    logging.info(f'Session data before create_lift_set: {session}')
+    
     user = User.query.filter_by(id=user_id).first()
     
     if not user:
         return {'message': 'Unauthorized'}, 401
     
     lift_set_data = request.get_json()
+    
+    
 
     try: 
         lift_set = LiftSet(
@@ -151,9 +165,13 @@ def create_lift_set():
             reps=lift_set_data['reps'],
             notes=lift_set_data['notes'],
             date=lift_set_data['date']
+            
         )
         db.session.add(lift_set)
         db.session.commit()
+        
+        logging.info(f'Session data after create_lift_set: {session}')
+        
         return lift_set.serialize(), 201
 
     except Exception as e:
@@ -225,15 +243,24 @@ def login():
     if not user or not user.authenticate(password):
         return make_response(jsonify({'error': 'Invalid username or password'}), 401)
 
+    user_id = user.id
+    
     session['username'] = user.username
     session['user_id'] = user.id
+    
+    logging.info(f'Session data after login: {session}')
 
     return make_response(jsonify({'message': 'Logged in successfully', 'user_id': user.id}), 200)
 
 
 @app.route('/logout', methods=['POST'])
 def logout():
+    logging.info(f'Session data before logout: {session}')
+    
     session.pop('user_id', None)  # Remove user ID from the session
+    
+    logging.info(f'Session data after logout: {session}')
+    
     return make_response(jsonify({'message': 'Logged out successfully'}), 200)
 
 

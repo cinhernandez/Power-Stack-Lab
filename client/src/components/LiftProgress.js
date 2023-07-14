@@ -1,5 +1,4 @@
 import React, {useEffect,  useContext } from 'react';  
-
 import { AppContext } from '../AppContext';
 import FitnessForm from './FitnessForm';
 

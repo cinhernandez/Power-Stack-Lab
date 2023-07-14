@@ -1,111 +1,130 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router-dom"; 
+import { useHistory } from "react-router-dom";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { AppContext } from "../AppContext";
 
+const Login = () => {
+  const {
+    setIsLoggedIn,
+    setErrors,
+    setIsSubmitting,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    setUser,
+  } = useContext(AppContext);
 
-
-const Login = () => { 
   const history = useHistory();
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
+
+  const login = (values, history) => {
+    return fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+      credentials: "include", // Send cookies
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((data) => Promise.reject(data.message));
+        }
+        return response.json();
+      })
+      .then((userData) => {
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("user", JSON.stringify(userData));
+        setIsLoggedIn(true);
+        setUser(userData);
+        console.log('logged in successfully');
+        history.push("/dashboard");
+      })
+      .catch((error) => {
+        console.error(error);
+        throw error;
+      });
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email address").required("Email is required"),
+    password: Yup.string().required("Password is required"),
   });
 
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValues({ ...values, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formErrors = validateForm(values);
-    setErrors(formErrors);
-    setIsSubmitting(true);
-
-    if (Object.keys(formErrors).length === 0) {
-      console.log("Submitting login request with values:", values);
-      fetch("/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-        credentials: "include",
-      })
-        .then((response) => {
-          console.log("Received response:", response);
-          if (response.ok) {
-            console.log("Login successful");
-            setIsLoggedIn(true);
-            history.push("/dashboard");
-          } else {
-            console.log("Login failed");
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema,
+    onSubmit: (values, { setSubmitting, setErrors }) => {
+      let isMounted = true;
+      login(values, history)
+        .then(() => {
+          if (isMounted) {
+            setSubmitting(false);
           }
         })
-        .catch((error) => {
-          console.log("Error logging in:", error);
-        })
-        .finally(() => {
-          setIsSubmitting(false);
+        .catch((err) => {
+          if (isMounted) {
+            setErrors({ submit: "Invalid email or password" });
+            setSubmitting(false);
+          }
         });
-    } else {
-      console.log("Form validation errors:", formErrors);
-    }
-  };
-
-  const validateForm = (values) => {
-    let errors = {};
-    if (!values.email) {
-      errors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(values.email)) {
-      errors.email = "Invalid email address";
-    }
-    if (!values.password) {
-      errors.password = "Password is required";
-    }
-    return errors;
-  };
+      return () => {
+        isMounted = false;
+      };
+    },
+  });
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
-      <form className="w-96 p-6 bg-white rounded-md shadow-md" onSubmit={handleSubmit}>
+      <form
+        className="w-96 p-6 bg-white rounded-md shadow-md"
+        onSubmit={formik.handleSubmit}
+      >
         <h2 className="mb-6 text-2xl font-bold text-center">Login</h2>
         <div className="mb-4">
-          <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
+          <label
+            className="block mb-2 text-sm font-bold text-gray-700"
+            htmlFor="email"
+          >
             Email
           </label>
-          <input 
+          <input
             type="email"
             name="email"
-            onChange={handleChange}
-            value={values.email}
+            onChange={formik.handleChange}
+            value={formik.values.email}
             className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
           />
-          {errors.email && (
-            <div className="text-red-500 text-xs">{errors.email}</div>
+          {formik.errors.email && (
+            <div className="text-red-500 text-xs">{formik.errors.email}</div>
           )}
         </div>
         <div className="mb-4">
-          <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="password">
+          <label
+            className="block mb-2 text-sm font-bold text-gray-700"
+            htmlFor="password"
+          >
             Password
           </label>
-          <input 
+          <input
             type="password"
             name="password"
-            onChange={handleChange}
-            value={values.password}
+            onChange={formik.handleChange}
+            value={formik.values.password}
             className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
           />
-          {errors.password && (
-            <div className="text-red-500 text-xs">{errors.password}</div>
+          {formik.errors.password && (
+            <div className="text-red-500 text-xs">{formik.errors.password}</div>
           )}
         </div>
         <div>
-          <button 
+          <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={formik.isSubmitting}
             className="w-full px-3 py-2 text-white bg-red-500 rounded-md hover:bg-black focus:outline-none"
           >
             Login
