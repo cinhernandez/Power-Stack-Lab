@@ -1,31 +1,34 @@
-import React, {useState} from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from '../AppContext';
 import {AiOutlineMenu, AiOutlineClose} from 'react-icons/ai';
 import {  NavLink, Link, useHistory  } from 'react-router-dom';
 
+ 
 
-
-const NavBar = ({isLoggedIn, handleLogout}) => {
-    const[nav, setNav] = useState(false);
+const NavBar = () => {
+    const {nav, setNav, isLoggedIn, user, setIsLoggedIn, setUser } = useContext(AppContext);
     const history = useHistory();
 
 
-    const handleLogoutClick = async () => {
-       if (window.confirm('Are you sure you want to log out?')) {
-        try {
-            const response = await fetch('/logout', {
-                method: 'POST',
+    const handleLogoutClick = (history) => {
+        fetch('/logout', {
+            method: 'POST',
+            credentials: 'include',  // Send cookies
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => Promise.reject(data.message));
+            }
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('user');
+            setIsLoggedIn(false);
+            setUser(null);
+            history.push('/');
+        })
+        .catch(error => {
+            console.error('Failed to log out: ', error);
         });
 
-        if (response.ok){
-            handleLogout();
-            history.push('/');
-        } else {
-            console.error('Logout failed');
-         }
-        } catch (error) {
-            console.error(error);
-        }
-        }
     };
 
     const handleNav = () => {
@@ -46,15 +49,20 @@ const NavBar = ({isLoggedIn, handleLogout}) => {
                     <NavLink exact to='/exercises'>
                         <li>Exercises</li>
                     </NavLink>
-                    
-                    <NavLink className='button' exact to='/create/lift_sets'>
+                    <NavLink className='button' exact to='/lift_sets'>
                         <li>Track Powerlifting Progress</li>
                     </NavLink>
-                    {!isLoggedIn && (
-                        <>
+                    <NavLink className='button' exact to='/max_lifts'>
+                        <li>Track Max Lifts</li>
+                    </NavLink>
                     <NavLink className='button' exact to='/dashboard'>
                         <li>Dashboard</li>
                     </NavLink>
+                    <NavLink className='button' exact to='/posts'>
+                        <li>Community Posts</li>
+                    </NavLink>
+                    {!isLoggedIn && (
+                        <>
                     <NavLink className='button' to='/signup'>
                         <li>Sign Up</li>
                     </NavLink>

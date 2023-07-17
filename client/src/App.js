@@ -1,17 +1,17 @@
 import React, {useContext} from "react";
 import { AppContext } from './AppContext';
-import { AppProvider } from './AppContext';
-
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 
-
+import MaxLiftForm from "./components/MaxLiftForm";
 import Dashboard from "./components/Dashboard";
-
+import Exercises from "./components/Exercises";
 import FitnessForm from "./components/FitnessForm";
+import Posts from "./components/Posts";
+
 
 
 
@@ -22,20 +22,7 @@ import FitnessForm from "./components/FitnessForm";
 function App() {
   const {isLoggedIn, setIsLoggedIn} = useContext(AppContext);
 
-  // const [exercises, setExercises] = useState([]);
-
-  // useEffect(() => {
-  //   fetch("https://exercisedb.p.rapidapi.com/exercises/bodyPartList", {
-  //     headers: {
-  //       "RapidAPI-Key": "db2f01624amsh0fff27ac3550af1p1a9cebjsne3a4f0b94a40",
-  //       "RapidAPI-Host": "exercisedb.p.rapidapi.com"
-  //   }
-  //   })
-  //     .then((response) => response.json())
-  //     .then((exercises) => setExercises(exercises)); 
-
-  // }, []);
-
+ 
   
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -57,7 +44,10 @@ function App() {
             />
           {/* <Route path="/exercises" component={ExerciseList}/> */}
           <Route path="/signup" component={SignUp}/>
-          <Route path="/create/lift_sets" component={FitnessForm} />
+          <Route path="/exercises" component={Exercises}/>
+          <Route path="/lift_sets" component={FitnessForm} />
+          <Route path="/posts" component={Posts} />
+          <Route path="/max_lifts" component={MaxLiftForm} />
           <Route exact path="/dashboard" 
             render={(props) => 
               isLoggedIn ? (

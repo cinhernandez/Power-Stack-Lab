@@ -98,7 +98,7 @@ class LiftSet(db.Model, SerializerMixin):
     reps= Column(Integer, nullable=False)
     notes = Column(String, nullable=True)
     date = Column(String, nullable=False)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False )
     
     users = db.relationship('User', backref='lift_sets')
     

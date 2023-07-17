@@ -4,6 +4,7 @@ import FitnessForm from './FitnessForm';
 
 import { useHistory } from 'react-router-dom';
 import LiftProgress from './LiftProgress';
+import MaxLifts from './MaxLifts';
 
 
 
@@ -23,12 +24,12 @@ const Dashboard = ({user, isLoggedIn, setIsLoggedIn}) => {
             
             
             <div className="w-full max-w-l">
-       
-              
+            <MaxLifts />
             </div>
             <div className="flex flex-col items-center mt-10">
             <LiftProgress />
             </div>
+
         </div>
         
     )

@@ -34,6 +34,7 @@ const SignUp = () => {
             'Content-Type': 'application/json',
           },
         body: JSON.stringify(values),
+        credentials: 'include',
         })
         .then((response) => {
           if (response.ok) {

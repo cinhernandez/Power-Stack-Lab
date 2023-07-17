@@ -7,20 +7,20 @@ const LiftProgress = () => {
   const { lifts, setLifts } = useContext(AppContext);
 
     useEffect(() => {
-        fetch('/lifts')
+        fetch('/lift_sets')
         .then(res => res.json())
         .then((data) => setLifts(data))
         .catch(err => console.log(err));
     }, []);
 
     const handleDelete = (liftId) => {
-        fetch(`/lifts/${liftId}`, {
+        fetch(`/lift_sets/${liftId}`, {
             method: 'DELETE',
         })
         .then((res) => res.json())
         .then((data) => {
           setLifts((prevLifts) => {
-            const updatedLifts = prevLifts.filter((lift) => lift.id !== data.id);
+            const updatedLifts = prevLifts.filter((lift) => lift.id !== liftId);
             return updatedLifts;
           });
         })
@@ -32,9 +32,8 @@ const LiftProgress = () => {
     return(
       <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
       <div className="mt-8 text-center">
-     <FitnessForm />
+     
         <div className="mb-4">
-         
         </div>
 
         {lifts.map((lift) => (

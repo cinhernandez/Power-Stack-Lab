@@ -16,22 +16,21 @@ const FitnessForm = () => {
       date
     };
 
-    fetch('/create/lift_sets', {
+    fetch('/lift_sets', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(newLift),
+        credentials: 'include',
     })
     .then((res) => res.json())
     .then((createdLift) => {
         setLifts((prevLifts) => [...prevLifts, createdLift]);
     })
-    .catch(err => console.log(err));
-        console.log('Error creating lift set');
 }
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     handleCreate();
 
@@ -46,7 +45,7 @@ const handleSubmit = async (e) => {
   
   };
 
-  return (
+    return (
     <div className="flex items-center justify-center h-screen bg-black">
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg  ">
     <h2 className="text-2xl font-bold mb-4 text-center text-black">Track Powerlifting Progress</h2>
