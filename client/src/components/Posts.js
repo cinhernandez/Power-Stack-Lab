@@ -1,5 +1,6 @@
 import React, {useEffect, useContext} from "react";
 import { AppContext } from "../AppContext";
+import PostsForm from "./PostsForm";
 
 const Posts = () => {
     const { posts, setPosts } = useContext(AppContext);
@@ -28,7 +29,7 @@ const Posts = () => {
     return (
         <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
         <div className="mt-8 text-center">
-       
+        <PostsForm />
           <div className="mb-4">
           </div>
 
@@ -37,7 +38,7 @@ const Posts = () => {
             <h2 className="text-2xl font-bold mb-4 text-center text-black">Community Posts</h2>
             <p className="text-xl font-bold mb-4 text-center text-black">Title: {post.title}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Content: {post.body}</p>
-            <p className="text-xl font-bold mb-4 text-center text-black">Date: {post.created_at}</p>
+            <p className="text-xl font-bold mb-4 text-center text-black">Date: {post.date}</p>
         
             <button
               onClick={() => handleDelete(post.id)}

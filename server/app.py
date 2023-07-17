@@ -58,8 +58,13 @@ api.add_resource(UserListById, '/users/<int:id>')
 
 class MaxLiftList(Resource):
     def get(self):
-        max_lifts = [max_lift.to_dict() for max_lift in MaxLift.query.all()]
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': 'Unauthorized'}, 401
+            
+        max_lifts = [max_lift.to_dict() for max_lift in MaxLift.query.filter_by(user_id=user_id).all()]
         return make_response(jsonify(max_lifts), 200)
+
     
     def post(self):
         user_id = session.get('user_id')
@@ -122,7 +127,11 @@ api.add_resource(MaxLiftListById, '/max_lifts/<int:id>')
 
 class LiftsSetList(Resource):
     def get(self):
-        lift_sets = [lift_set.to_dict() for lift_set in LiftSet.query.all()]
+        user_id = session.get('user_id')
+        if not user_id:
+            return {'message': 'Unauthorized'}, 401
+
+        lift_sets = [lift_set.to_dict() for lift_set in LiftSet.query.filter_by(user_id=user_id).all()]
         return make_response(jsonify(lift_sets), 200)
     
     
@@ -201,16 +210,17 @@ class PostsList(Resource):
         post_data = request.get_json()
 
         try: 
-            post = Post(
+            posts = Post(
                 user_id=user_id,
                 title=post_data['title'],
-                content=post_data['content'],
+                body=post_data['body'],
                 date=post_data['date']
+              
             )
-            db.session.add(post)
+            db.session.add(posts)
             db.session.commit()
         
-            return make_response(jsonify(post.to_dict()), 201)
+            return make_response(jsonify(posts.to_dict()), 201)
 
         except Exception as e:
             return {"message": f"An error occurred: {str(e)}"}, 500

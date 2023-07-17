@@ -59,8 +59,8 @@ with app.app_context():
         
         title = "lifting"
         body = fake.paragraph()
-        created_at = fake.date_time_between(start_date='-1y', end_date='now')
-        post = Post(title=title, body=body, created_at=created_at, user_id=user.id)
+        date = fake.date_this_year()
+        post = Post(title=title, body=body, date=date, user_id=user.id)
         db.session.add(post)
         db.session.commit()
         

@@ -29,6 +29,8 @@ export const AppProvider = ({ children }) => {
     const [deadliftMax, setDeadliftMax] = useState('');
 
     const [posts, setPosts] = useState([]);
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('');
     
 
     const history = useHistory();
@@ -53,7 +55,8 @@ return(
     <AppContext.Provider value={{
         isLoggedIn, authError, setAuthError, setIsLoggedIn, user, setUser, name, setName, date, setDate, weightLifted, setWeightLifted, setNumber, 
         setSetNumber, reps, setReps, notes, setNotes, lifts, setLifts, history, errors, setErrors, isSubmitting, setIsSubmitting, email, setEmail, password, 
-        setPassword, nav, setNav, maxLifts, setMaxLifts, posts, setPosts, squatMax, setSquatMax, benchMax, setBenchMax, deadliftMax, setDeadliftMax
+        setPassword, nav, setNav, maxLifts, setMaxLifts, posts, setPosts, squatMax, setSquatMax, benchMax, setBenchMax, deadliftMax, setDeadliftMax,
+        title, setTitle, body, setBody,
     }}>
         {children}
     </AppContext.Provider>

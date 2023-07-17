@@ -108,7 +108,7 @@ class Post(db.Model, SerializerMixin):
     title = Column(String, nullable=False)
     body = Column(String, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    created_at = Column(TIMESTAMP, nullable=False)
+    date = Column(String, nullable=False)
     
     users = db.relationship('User', backref='posts')
 
