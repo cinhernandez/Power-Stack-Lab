@@ -45,7 +45,6 @@ class User(db.Model, SerializerMixin):
     
   
 
-
     @validates('username')
     def validate_username(self, key, username):
         if not username:
@@ -110,5 +109,22 @@ class Post(db.Model, SerializerMixin):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     date = Column(String, nullable=False)
     
-    users = db.relationship('User', backref='posts')
+    user = db.relationship('User', backref='posts')
+    comments = db.relationship('Comment', back_populates='post')
+    
+    serialize_rules=(  'comments', )
+    
 
+class Comment(db.Model, SerializerMixin):
+    __tablename__ = 'comments'
+    id = Column(Integer, primary_key=True)
+    body = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    post_id = Column(Integer, ForeignKey('posts.id'), nullable=False)
+    
+    
+    user = db.relationship('User', backref='comments')
+    post = db.relationship('Post', back_populates='comments')
+
+    
+    serialize_rules=('-user', '-post' )

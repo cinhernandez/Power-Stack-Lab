@@ -29,9 +29,21 @@ export const AppProvider = ({ children }) => {
     const [deadliftMax, setDeadliftMax] = useState('');
 
     const [posts, setPosts] = useState([]);
+    const [likes, setLikes] = useState({});
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     
+    const [squat, setSquat] = useState('');
+    const [bench, setBench] = useState('');
+    const [deadlift, setDeadlift] = useState('');
+
+    const [program, setProgram] = useState({ squat: [], bench: [], deadlift: [] });
+    const [commentFormPostId, setCommentFormPostId] = useState(null);
+    const [comment, setComment] = useState('');
+
+    const [postToEdit, setPostToEdit] = useState(null);
+ 
+
 
     const history = useHistory();
 
@@ -46,9 +58,6 @@ export const AppProvider = ({ children }) => {
     }, []);
    
 
-
-
-    
     
 
 return(
@@ -56,7 +65,8 @@ return(
         isLoggedIn, authError, setAuthError, setIsLoggedIn, user, setUser, name, setName, date, setDate, weightLifted, setWeightLifted, setNumber, 
         setSetNumber, reps, setReps, notes, setNotes, lifts, setLifts, history, errors, setErrors, isSubmitting, setIsSubmitting, email, setEmail, password, 
         setPassword, nav, setNav, maxLifts, setMaxLifts, posts, setPosts, squatMax, setSquatMax, benchMax, setBenchMax, deadliftMax, setDeadliftMax,
-        title, setTitle, body, setBody,
+        title, setTitle, body, setBody, squat, setSquat, bench, setBench, deadlift, setDeadlift, likes, setLikes, program, setProgram,
+        commentFormPostId, setCommentFormPostId, comment, setComment, postToEdit, setPostToEdit, 
     }}>
         {children}
     </AppContext.Provider>

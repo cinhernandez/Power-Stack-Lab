@@ -88,6 +88,7 @@ return (
               name="email"
               onChange={formik.handleChange}
               value={formik.values.email}
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
             />
             {formik.errors.email && (
                 <div className="text-red-500">{formik.errors.email}</div>
@@ -103,6 +104,7 @@ return (
               name="password"
               onChange={formik.handleChange}
               value={formik.values.password}
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
             />
             {formik.errors.password && (
                 <div className="text-red-500">{formik.errors.password}</div>
@@ -118,17 +120,26 @@ return (
               name="confirmPassword"
               onChange={formik.handleChange}
               value={formik.values.confirmPassword}
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:border-indigo-500"
             />
             {formik.errors.confirmPassword && (
                 <div className="text-red-500">{formik.errors.confirmPassword}</div>
             )}
             </div>
+            <div className='flex flex-col items-center justify-center'></div>
             <button
             type="submit"
             className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
             disabled={formik.isSubmitting}>
             Sign Up
             </button>
+            <div className='w-full border-b border-white mb-2'></div>
+            <button
+            onClick={() => history.push("/login")}
+            className="w-full px-3 py-2 text-white bg-black rounded-md hover:bg-white focus:outline-none"
+          >
+            Already have an account?  Login
+          </button>
         </form>
         </div>
   );

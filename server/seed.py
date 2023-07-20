@@ -12,7 +12,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 # Local imports
 from app import app
-from models import db, User, MaxLift, Post, LiftSet
+from models import db, User, MaxLift, Post, LiftSet, Comment
 # fake = Faker()
 
 migrte = Migrate(app, db)
@@ -55,8 +55,7 @@ with app.app_context():
         db.session.add(lift_set)
         db.session.commit()
         
-        
-        
+        # Generate posts
         title = "lifting"
         body = fake.paragraph()
         date = fake.date_this_year()
@@ -65,7 +64,12 @@ with app.app_context():
         db.session.commit()
         
 
-
+        # Generate comments
+        body= fake.paragraph()
+        comment = Comment(body=body, user_id=user.id, post_id=post.id)
+        db.session.add(comment)
+        db.session.commit()
+        
 
 
 

@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../AppContext';
-import {AiOutlineMenu, AiOutlineClose} from 'react-icons/ai';
-import {  NavLink, Link, useHistory  } from 'react-router-dom';
+import {  NavLink, Link } from 'react-router-dom';
 
  
 
 const NavBar = () => {
-    const {nav, setNav, isLoggedIn, user, setIsLoggedIn, setUser } = useContext(AppContext);
-    const history = useHistory();
+    const {isLoggedIn, setIsLoggedIn, setUser,  } = useContext(AppContext);
+  
 
 
     const handleLogoutClick = (history) => {
@@ -23,17 +22,13 @@ const NavBar = () => {
             localStorage.removeItem('user');
             setIsLoggedIn(false);
             setUser(null);
-            history.push('/');
+            
         })
-        .catch(error => {
-            console.error('Failed to log out: ', error);
-        });
+
 
     };
 
-    const handleNav = () => {
-        setNav(!nav)
-    }
+
 
     return (
         <div className='w-full h-[90px] bg-black'>
@@ -46,15 +41,20 @@ const NavBar = () => {
                 <nav>
                     <div className= 'navigation'>
                     <ul className='flex text-white items-center'>
-                    <NavLink exact to='/exercises'>
-                        <li>Exercises</li>
+                {isLoggedIn && (
+                    <>
+                    <NavLink exact to='/generate_program'>
+                        <li>Generate Powerlifting Program</li>
                     </NavLink>
+                    
                     <NavLink className='button' exact to='/lift_sets'>
                         <li>Track Powerlifting Progress</li>
                     </NavLink>
                     <NavLink className='button' exact to='/max_lifts'>
                         <li>Track Max Lifts</li>
                     </NavLink>
+                    </>
+                )}
                     <NavLink className='button' exact to='/dashboard'>
                         <li>Dashboard</li>
                     </NavLink>
@@ -63,9 +63,7 @@ const NavBar = () => {
                     </NavLink>
                     {!isLoggedIn && (
                         <>
-                    <NavLink className='button' to='/signup'>
-                        <li>Sign Up</li>
-                    </NavLink>
+                   
                     <NavLink className='button' to='/login'>
                         <li>Login</li>
                     </NavLink>
@@ -79,9 +77,7 @@ const NavBar = () => {
                     >
                         Logout
                     </button>
-                    <Link to='/signup'>
-                        <button className='ml-4'  onClick={handleNav}>Use PWR Stack Lab</button>
-                    </Link>
+                    
                     </>
                     )}
                     </ul>

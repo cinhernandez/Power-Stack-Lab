@@ -6,6 +6,7 @@ import FitnessForm from './FitnessForm';
 const LiftProgress = () => {
   const { lifts, setLifts } = useContext(AppContext);
 
+
     useEffect(() => {
         fetch('/lift_sets')
         .then(res => res.json())
@@ -26,6 +27,7 @@ const LiftProgress = () => {
         })
         .catch(err => console.log(err));
     };
+  
 
     
 
@@ -37,7 +39,7 @@ const LiftProgress = () => {
         </div>
 
         {lifts.map((lift) => (
-          <div key={lift.id} className="flex flex-col items-center mt-10">
+          <div key={lift.id} className="flex flex-col items-center mt-10 p-4 rounded shadow-lg">
             <h2 className="text-2xl font-bold mb-4 text-center text-black">Lift Progress</h2>
             <p className="text-xl font-bold mb-4 text-center text-black">{lift.name}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Sets: {lift.set_number}</p>
@@ -45,12 +47,15 @@ const LiftProgress = () => {
             <p className="text-xl font-bold mb-4 text-center text-black">Reps: {lift.reps}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Notes: {lift.notes}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Date: {lift.date}</p>
+            <div className="flex items-center justify-between mt-4">
             <button
               onClick={() => handleDelete(lift.id)}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
             >
               Delete
             </button>
+           
+          </div>
           </div>
         ))}
       </div>

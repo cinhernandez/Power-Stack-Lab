@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import video from '../assets/video.mp4'
 import {VscComment, VscGraph, VscOrganization, VscHeartFilled  } from 'react-icons/vsc'
 
@@ -13,7 +14,9 @@ const Home = () => {
                 <h1 className='text-red-500 py-2'>Program Generator</h1>
                 <p className='text-xl py-4'>Ignite Your Potential: Unleash Your Power with our Powerlifting Generator!</p>
                 <div>
+                <Link to='/login'>
                     <button>Get Started</button>
+                </Link>
                 </div>
             </div>
         
@@ -28,17 +31,17 @@ const Home = () => {
         <div className='grid sm:grid-cols-2 gap-4'>
                 <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
                     <div className='bg-[red] inline-flex p-2 rounded-full'><VscComment size={40} /></div>
-                    <h3 className='text-xl font-bold py-4'>Take Notes</h3>
-                    <p>Track your weekly progress</p>
+                    <h3 className='text-xl font-bold py-4'>Track Your Progress</h3>
+                    <p>Track your daily progress</p>
                 </div>
                 <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
                     <div className='bg-[red] inline-flex p-2 rounded-full'><VscGraph size={40}/></div>
-                    <h3 className='text-xl font-bold py-4'>Weekly Chart</h3>
-                    <p>Progress reimagined</p>
+                    <h3 className='text-xl font-bold py-4'>Powerlifting Program</h3>
+                    <p>Generate an 8 week powerlifitng program</p>
                 </div>
                 <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
                     <div className='bg-[red] inline-flex p-2 rounded-full'><VscOrganization size={40}/></div>
-                    <h3 className='text-xl font-bold py-4'>Community</h3>
+                    <h3 className='text-xl font-bold py-4'>Community Forum</h3>
                     <p>You will have access to the powerlifting community</p>
                 </div>
                 <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>

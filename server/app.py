@@ -18,7 +18,7 @@ from datetime import datetime
 
 # Local imports
 from config import app, db, api
-from models import db, User, MaxLift, Post, LiftSet
+from models import db, User, MaxLift, Post, LiftSet, Comment
 
 # load_dotenv('.env')
 # Views go here!
@@ -110,17 +110,6 @@ class MaxLiftListById(Resource):
         db.session.commit()
         return make_response({'message': 'Max Lift deleted successfully'}, 200)
     
-    def patch(self, id):
-        max_lift = MaxLift.query.get(id)
-        if not max_lift:
-            return {'error': '404: Max Lift not found'}, 404
-
-        data = request.get_json()
-        for key, value in data.items():
-            setattr(max_lift, key, value)
-
-        db.session.commit()
-        return make_response(jsonify(max_lift.to_dict()), 200)
 
 api.add_resource(MaxLiftListById, '/max_lifts/<int:id>')
 
@@ -180,17 +169,6 @@ class LiftsSetById(Resource):
         db.session.commit()
         return make_response({'message': 'Lift deleted successfully'}, 200)
     
-    def patch(self, id):
-        lift = LiftSet.query.get(id)
-        if not lift:
-            return {'error': '404: Lift not found'}, 404
-
-        data = request.get_json()
-        for key, value in data.items():
-            setattr(lift, key, value)
-
-        db.session.commit()
-        return make_response(jsonify(lift.to_dict()), 200)
     
 api.add_resource(LiftsSetById, '/lift_sets/<int:id>')
 
@@ -235,15 +213,6 @@ class PostsListById(Resource):
             return {'error': '404: Post not found'}, 404
         return make_response(jsonify(post.to_dict()), 200)
     
-    def delete(self, id):
-        post = Post.query.get(id)
-        if not post:
-            return {'error': '404: Post not found'}, 404
-        
-        db.session.delete(post)
-        db.session.commit()
-        return make_response({'message': 'Post deleted successfully'}, 200)
-    
     def patch(self, id):
         post = Post.query.get(id)
         if not post:
@@ -258,6 +227,74 @@ class PostsListById(Resource):
 
 api.add_resource(PostsListById, '/posts/<int:id>')
 
+
+class CommentsList(Resource):
+    def get(self):
+        comments = [comment.to_dict() for comment in Comment.query.all()]
+        return make_response(jsonify(comments), 200)
+    
+        
+api.add_resource(CommentsList, '/comments')
+
+class PostCommentsList(Resource):
+    def post(self, post_id):
+        user_id = session.get('user_id')
+        user = User.query.filter_by(id=user_id).first()
+        post = Post.query.filter_by(id=post_id).first()
+        
+        if not user or not post:
+            return {'message': 'Unauthorized or post not found'}, 401
+
+        comment_data = request.get_json()
+
+        try: 
+            comment = Comment(
+                user_id=user_id,
+                body=comment_data['body'],
+                post_id=post_id
+            )
+            db.session.add(comment)
+            db.session.commit()
+        
+            return make_response(jsonify(comment.to_dict()), 201)
+
+        except Exception as e:
+            return {"message": f"An error occurred: {str(e)}"}, 500
+        
+    def delete(self, post_id):
+        user_id = session.get('user_id')  # Get the current user's ID
+        comment = Comment.query.get(post_id)
+        if not comment:
+            return {'error': '404: Comment not found'}, 404
+        if comment.user_id != user_id:  # If the current user didn't create the post...
+            return {'error': '403: Forbidden'}, 403  # ... then they can't delete it.
+
+        db.session.delete(comment)
+        db.session.commit()
+        return make_response({'message': 'Comment deleted successfully'}, 200)
+
+api.add_resource(PostCommentsList, '/posts/<int:post_id>/comments')
+
+
+
+class CommentListById(Resource):
+    def get(self, id):
+        comment = Comment.query.get(id)
+        if not comment:
+            return {'error': '404: Post not found'}, 404
+        return make_response(jsonify(comment.to_dict()), 200)
+    
+    def delete(self, id):
+        comment = Comment.query.get(id)
+        if not comment:
+            return {'error': '404: Post not found'}, 404
+        
+        db.session.delete(comment)
+        db.session.commit()
+        return make_response({'message': 'Post deleted successfully'}, 200)
+    
+
+api.add_resource(CommentListById, '/comments/<int:id>')
 
 
 class Signup(Resource):

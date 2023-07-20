@@ -5,16 +5,12 @@ import NavBar from "./components/NavBar";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-
+import ProgramGenerator from "./components/ProgramGenerator";
 import MaxLiftForm from "./components/MaxLiftForm";
 import Dashboard from "./components/Dashboard";
-import Exercises from "./components/Exercises";
 import FitnessForm from "./components/FitnessForm";
 import Posts from "./components/Posts";
-
-
-
-
+import Footer from "./components/Footer";
 
 
 
@@ -24,18 +20,13 @@ function App() {
 
  
   
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
 
  
-
-
 
   return (
   
      <Router>
-      <NavBar  handleLogout={handleLogout} />
+      <NavBar  />
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route 
@@ -44,7 +35,7 @@ function App() {
             />
           {/* <Route path="/exercises" component={ExerciseList}/> */}
           <Route path="/signup" component={SignUp}/>
-          <Route path="/exercises" component={Exercises}/>
+          <Route path="/generate_program" component={ProgramGenerator} />
           <Route path="/lift_sets" component={FitnessForm} />
           <Route path="/posts" component={Posts} />
           <Route path="/max_lifts" component={MaxLiftForm} />
@@ -57,10 +48,11 @@ function App() {
               )
             }
           /> 
-        
+      
         </Switch>
+        
       </Router>
-   
+     
   );
 }
 

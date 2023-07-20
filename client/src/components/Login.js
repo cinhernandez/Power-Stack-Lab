@@ -90,7 +90,7 @@ const Login = () => {
             className="block mb-2 text-sm font-bold text-gray-700"
             htmlFor="email"
           >
-            Email
+            Email:
           </label>
           <input
             type="email"
@@ -108,7 +108,7 @@ const Login = () => {
             className="block mb-2 text-sm font-bold text-gray-700"
             htmlFor="password"
           >
-            Password
+            Password:
           </label>
           <input
             type="password"
@@ -122,6 +122,7 @@ const Login = () => {
           )}
         </div>
         <div>
+        <div className='flex flex-col items-center justify-center'>
           <button
             type="submit"
             disabled={formik.isSubmitting}
@@ -129,6 +130,15 @@ const Login = () => {
           >
             Login
           </button>
+          <div className='w-full border-b border-white mb-2'></div>
+          <button
+            onClick={() => history.push("/signup")}
+            className="w-full px-3 py-2 text-white bg-black rounded-md hover:bg-white focus:outline-none"
+          >
+            Create New Account
+          </button>
+          
+          </div>
         </div>
       </form>
     </div>

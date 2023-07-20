@@ -2,11 +2,13 @@ import React, { useContext } from 'react';
 import { AppContext } from '../AppContext';
 
 const FitnessForm = () => {
-  const { name, setName, date, setDate, weightLifted, setWeightLifted, setNumber, setSetNumber, reps, setReps, notes, setNotes, setLifts } = useContext(AppContext);
-
+  const {
+    name, setName, date, setDate, weightLifted, setWeightLifted,
+    setNumber, setSetNumber, reps, setReps, notes, setNotes,
+   setLifts, 
+  } = useContext(AppContext);
 
   const handleCreate = () => {
-
     const newLift = {
       name,
       weight_lifted: parseFloat(weightLifted),
@@ -28,29 +30,35 @@ const FitnessForm = () => {
     .then((createdLift) => {
         setLifts((prevLifts) => [...prevLifts, createdLift]);
     })
-}
+    .then(() => resetFormFields());
+  };
+
+  
+
+   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleCreate();
+      handleCreate();
+    }
+  
 
-
-      // Reset form fields
+  const resetFormFields = () => {
     setName('');
     setWeightLifted('');
     setSetNumber('');
     setReps('');
     setNotes('');
     setDate('');
-  
   };
+
 
     return (
     <div className="flex items-center justify-center h-screen bg-black">
     <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg  ">
     <h2 className="text-2xl font-bold mb-4 text-center text-black">Track Powerlifting Progress</h2>
     <div className="mb-4 space-y-4">
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} >
       <label htmlFor="name" className="block text-sm font-medium">Exercise:</label>
       <select
         type="text"
@@ -115,6 +123,7 @@ const FitnessForm = () => {
         className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
 
+      <div className='w-full border-b border-white mb-4'></div>
       <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Submit</button>
     </form>
     </div>

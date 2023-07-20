@@ -5,6 +5,7 @@ const PostsForm = () => {
     const { title, setTitle, body, setBody, date, setDate, setPosts } = useContext(AppContext);
 
 
+
     const handleCreate = () => {
         const newPost = {
             title,
@@ -24,22 +25,32 @@ const PostsForm = () => {
         .then((res) => res.json())
         .then((createdPost) => {
         setPosts((prevPosts) => [...prevPosts, createdPost]);
-        })
-    }
+
+      })
+    
+  
+        // Reset form fields and postToEdit
+        setTitle('');
+        setBody('');
+        setDate('');
+      
+  }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        handleCreate();
+          handleCreate();
+        }
+      
 
         // Reset form fields
         setTitle('');
         setBody('');
         setDate('');
 
-    }
+     
 
     return (
-        <div className="flex items-center justify-center h-screen bg-black">
+        <div className="flex items-center justify-center h-screen bg-white">
         <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg  ">
         <h2 className="text-2xl font-bold mb-4 text-center text-black"> Create Community Post</h2>
         <div className="mb-4 space-y-4">
@@ -74,8 +85,11 @@ const PostsForm = () => {
           ></input>
     
         
-    
-          <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Submit</button>
+          <div className='w-full border-b border-white mb-4'></div>
+          <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          Submit
+         
+          </button>
         </form>
         </div>
         </div>
