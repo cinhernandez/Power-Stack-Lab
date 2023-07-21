@@ -1,10 +1,10 @@
 import React, {useEffect,  useContext } from 'react';  
 import { AppContext } from '../AppContext';
-import FitnessForm from './FitnessForm';
+import LiftProgressUpdate from './LiftProgressUpdate';
 
 
 const LiftProgress = () => {
-  const { lifts, setLifts } = useContext(AppContext);
+  const { lifts, setLifts, setEditingLiftProgress, setIsEditing, isEditing } = useContext(AppContext);
 
 
     useEffect(() => {
@@ -42,8 +42,8 @@ const LiftProgress = () => {
           <div key={lift.id} className="flex flex-col items-center mt-10 p-4 rounded shadow-lg">
             <h2 className="text-2xl font-bold mb-4 text-center text-black">Lift Progress</h2>
             <p className="text-xl font-bold mb-4 text-center text-black">{lift.name}</p>
-            <p className="text-xl font-bold mb-4 text-center text-black">Sets: {lift.set_number}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Weight: {lift.weight_lifted} lbs</p>
+            <p className="text-xl font-bold mb-4 text-center text-black">Sets: {lift.set_number}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Reps: {lift.reps}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Notes: {lift.notes}</p>
             <p className="text-xl font-bold mb-4 text-center text-black">Date: {lift.date}</p>
@@ -54,7 +54,17 @@ const LiftProgress = () => {
             >
               Delete
             </button>
-           
+            <button
+              onClick={() => {
+              setEditingLiftProgress(lift)
+              setIsEditing(true);
+              }}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
+            >
+              Edit
+            </button>
+            {isEditing && <LiftProgressUpdate onClose={() => setIsEditing(false)} />}
+              
           </div>
           </div>
         ))}

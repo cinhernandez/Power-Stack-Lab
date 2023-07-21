@@ -86,7 +86,7 @@ const Posts = () => {
                 <div key={comment.id} className="bg-gray-100 rounded px-4 py-2 mb-2">
                 <img src="https://source.unsplash.com/random/200x200/?fitness" alt="Fitness-Placeholder" className="rounded-full h-12 w-12 mr-4" />
                     <p className="text-black">{comment.body}</p>
-                    <p className="text-sm text-gray-700">- {comment.user?.username}</p>
+                    <p className="text-sm text-gray-700">Posted by: {comment.user?.username}</p>
                 </div>
                 ))} 
     
@@ -113,7 +113,8 @@ const Posts = () => {
                         Comment
                     </button>
                     )}
-                   
+
+        
                 </div>
                 {commentFormPostId === post.id && <CommentForm postId={post.id} closeForm={closeCommentForm} />}
             </div>

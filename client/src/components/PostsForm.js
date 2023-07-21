@@ -13,7 +13,7 @@ const PostsForm = () => {
             date,
           
         };
-
+     
         fetch('/posts', {
             method: 'POST',
             headers: {
@@ -24,15 +24,17 @@ const PostsForm = () => {
         })
         .then((res) => res.json())
         .then((createdPost) => {
-        setPosts((prevPosts) => [...prevPosts, createdPost]);
+          setPosts((prevPosts) => [...prevPosts, createdPost]);
 
-      })
-    
-  
-        // Reset form fields and postToEdit
+
+           // Reset form fields
         setTitle('');
         setBody('');
         setDate('');
+
+        
+      })
+    
       
   }
 
@@ -42,11 +44,7 @@ const PostsForm = () => {
         }
       
 
-        // Reset form fields
-        setTitle('');
-        setBody('');
-        setDate('');
-
+       
      
 
     return (
@@ -87,8 +85,8 @@ const PostsForm = () => {
         
           <div className='w-full border-b border-white mb-4'></div>
           <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-          Submit
-         
+            Submit
+          
           </button>
         </form>
         </div>

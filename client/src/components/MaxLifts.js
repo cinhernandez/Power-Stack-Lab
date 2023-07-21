@@ -1,8 +1,9 @@
 import React, {useEffect, useContext} from 'react';
 import { AppContext } from '../AppContext';
+import UpdateMaxLifts from './UpdateMaxLifts';
 
 const MaxLifts = () => {
-    const { maxLifts, setMaxLifts } = useContext(AppContext);
+    const { maxLifts, setMaxLifts, updateMaxLift, editingMaxLift, isEditing, setEditingMaxLift, setIsEditing } = useContext(AppContext);
 
     useEffect(() => {
         fetch('/max_lifts')
@@ -46,12 +47,22 @@ const MaxLifts = () => {
             >
               Delete
             </button>
-         
+            <button
+              onClick={() => {
+              setEditingMaxLift(maxLift);
+              setIsEditing(true);
+            }}
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
+            >
+              Edit
+            </button>
           
          
             </div>
           </div>
         ))}
+        {isEditing && <UpdateMaxLifts onClose={() => setIsEditing(false)} />}
+
           </div>
           </div>
     )

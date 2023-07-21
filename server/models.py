@@ -127,4 +127,9 @@ class Comment(db.Model, SerializerMixin):
     post = db.relationship('Post', back_populates='comments')
 
     
-    serialize_rules=('-user', '-post' )
+    serialize_rules=( '-user', '-post', )
+    
+    def to_dict(self):
+        data = SerializerMixin.to_dict(self)
+        data['username'] = self.user.username
+        return data

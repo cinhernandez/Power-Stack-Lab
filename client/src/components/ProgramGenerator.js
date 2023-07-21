@@ -89,7 +89,24 @@ const ProgramGenerator = () => {
         className="mt-1 w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
       ></input>
       <div className='w-full border-b border-white mb-4'></div>
-      <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Submit</button>
+      <div className="flex items-center justify-between mt-4">
+      <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 mr-4">
+      Submit
+      </button>
+      <button
+      onClick={(e) => {
+        e.preventDefault(); // prevent form submission
+        setSquat('');
+        setBench('');
+        setDeadlift('');
+        setProgram({});
+        localStorage.removeItem('program');
+        }}
+      className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+      >
+      Reset
+    </button>
+    </div>
     </form>
     </div>
     </div>
@@ -97,7 +114,7 @@ const ProgramGenerator = () => {
       {['squat', 'bench', 'deadlift'].map(exercise => (
         <div key={exercise}>
           <h3 className="text-xl font-bold mb-4 text-center text-black">{exercise}</h3>
-          {program[exercise].map((week, index) => (
+          {program[exercise] && program[exercise].map((week, index) => (
             <p key={index} className="text-lg text-center text-black">
               Week {week.week}: {week.sets} sets of {week.reps} reps at {week.weight.toFixed(2)} lbs
             </p>

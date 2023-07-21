@@ -109,6 +109,21 @@ class MaxLiftListById(Resource):
         db.session.delete(max_lift)
         db.session.commit()
         return make_response({'message': 'Max Lift deleted successfully'}, 200)
+
+    def patch(self, id):
+        max_lift = MaxLift.query.get(id)
+        if not max_lift:
+            return {'error': '404: Max Lift not found'}, 404
+        
+        max_lift_data = request.get_json()
+        max_lift.squat_max = max_lift_data['squat_max']
+        max_lift.bench_max = max_lift_data['bench_max']
+        max_lift.deadlift_max = max_lift_data['deadlift_max']
+        max_lift.date = max_lift_data['date']
+        db.session.commit()
+        return make_response(jsonify(max_lift.to_dict()), 200)
+
+
     
 
 api.add_resource(MaxLiftListById, '/max_lifts/<int:id>')
@@ -169,6 +184,21 @@ class LiftsSetById(Resource):
         db.session.commit()
         return make_response({'message': 'Lift deleted successfully'}, 200)
     
+    def patch(self, id):
+        lift = LiftSet.query.get(id)
+        if not lift:
+            return {'error': '404: Lift not found'}, 404
+        
+        lift_data = request.get_json()
+        lift.name = lift_data['name']
+        lift.set_number = lift_data['set_number']
+        lift.weight_lifted = lift_data['weight_lifted']
+        lift.reps = lift_data['reps']
+        lift.notes = lift_data['notes']
+        lift.date = lift_data['date']
+        db.session.commit()
+        return make_response(jsonify(lift.to_dict()), 200)
+    
     
 api.add_resource(LiftsSetById, '/lift_sets/<int:id>')
 
@@ -213,17 +243,7 @@ class PostsListById(Resource):
             return {'error': '404: Post not found'}, 404
         return make_response(jsonify(post.to_dict()), 200)
     
-    def patch(self, id):
-        post = Post.query.get(id)
-        if not post:
-            return {'error': '404: Post not found'}, 404
 
-        data = request.get_json()
-        for key, value in data.items():
-            setattr(post, key, value)
-
-        db.session.commit()
-        return make_response(jsonify(post.to_dict()), 200)
 
 api.add_resource(PostsListById, '/posts/<int:id>')
 
