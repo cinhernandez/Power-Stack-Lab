@@ -41,7 +41,7 @@ class User(db.Model, SerializerMixin):
     email = Column(String(255), unique=True, nullable=False)
     created_at = Column(TIMESTAMP, nullable=False)
 
-    serialize_rules=('-lift_sets', '-max_lifts', '-posts')
+    serialize_rules = ('-password_hash', '-email', '-created_at', '-lift_sets', '-max_lifts', '-posts', '-comments')
     
   
 
@@ -127,9 +127,6 @@ class Comment(db.Model, SerializerMixin):
     post = db.relationship('Post', back_populates='comments')
 
     
-    serialize_rules=( '-user', '-post', )
+    serialize_rules=( 'user', '-post', )
     
-    def to_dict(self):
-        data = SerializerMixin.to_dict(self)
-        data['username'] = self.user.username
-        return data
+    
