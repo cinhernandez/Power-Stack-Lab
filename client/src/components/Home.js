@@ -47,7 +47,7 @@ const Home = () => {
                 <div className='flex flex-col border text-left rounded-2xl py-12 px-8'>
                     <div className='bg-[red] inline-flex p-2 rounded-full'><VscHeartFilled size={40} /></div>
                     <h3 className='text-xl font-bold py-4'>Favorites</h3>
-                    <p>Access to all previous programs</p>
+                    <p>Access to your favorite tracking tools</p>
                 </div>
             </div>
         </div>

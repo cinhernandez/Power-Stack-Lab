@@ -23,3 +23,23 @@
        @apply bg-gradient-to-r from-red-500 p-3 px-7 rounded-3xl
     }
 }
+
+@keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .animated-gradient {
+    background-size: 200% 200%;
+    background-image: linear-gradient(45deg, #000000, #1a1a1a, #000000);
+    animation: gradient 3s ease infinite;
+  }
+  
+  

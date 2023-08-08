@@ -43,7 +43,7 @@ const MaxLifts = () => {
             <div className="flex items-center justify-between mt-4">
             <button
               onClick={() => handleDelete(maxLift.id)}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
+              className="bg-gradient-to-r from-red-500 to-black hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
             >
               Delete
             </button>
@@ -52,7 +52,7 @@ const MaxLifts = () => {
               setEditingMaxLift(maxLift);
               setIsEditing(true);
             }}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
+              className="bg-gradient-to-r from-red-500 to-black hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
             >
               Edit
             </button>

@@ -126,7 +126,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full px-3 py-2 text-white bg-red-500 rounded-md hover:bg-black focus:outline-none"
+            className="w-full px-3 py-2 text-white bg-gradient-to-r from-red-500 to-black rounded-md hover:bg-black focus:outline-none"
           >
             Login
           </button>

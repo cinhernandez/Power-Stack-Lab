@@ -4,7 +4,7 @@ import LiftProgressUpdate from './LiftProgressUpdate';
 
 
 const LiftProgress = () => {
-  const { lifts, setLifts, setEditingLiftProgress, setIsEditing, isEditing } = useContext(AppContext);
+  const { lifts, setLifts, setEditingLiftProgress, setIsEditingLift, isEditingLift } = useContext(AppContext);
 
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const LiftProgress = () => {
     
 
     return(
-      <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center">
+      <div className="bg-gradient-animation min-h-screen flex flex-col justify-start items-center ">
       <div className="mt-8 text-center">
      
         <div className="mb-4">
@@ -50,20 +50,20 @@ const LiftProgress = () => {
             <div className="flex items-center justify-between mt-4">
             <button
               onClick={() => handleDelete(lift.id)}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
+              className="bg-gradient-to-r from-red-500 to-black hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
             >
               Delete
             </button>
             <button
               onClick={() => {
               setEditingLiftProgress(lift)
-              setIsEditing(true);
+              setIsEditingLift(true);
               }}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
+              className="bg-gradient-to-r from-red-500 to-black hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-4"
             >
               Edit
             </button>
-            {isEditing && <LiftProgressUpdate onClose={() => setIsEditing(false)} />}
+            {isEditingLift && <LiftProgressUpdate onClose={() => setIsEditingLift(false)} />}
               
           </div>
           </div>

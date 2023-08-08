@@ -237,15 +237,27 @@ api.add_resource(PostsList, '/posts')
 
 
 class PostsListById(Resource):
-    def get(self, id):
-        post = Post.query.get(id)
+    def get(self, post_id):
+        post = Post.query.get(post_id)
         if not post:
             return {'error': '404: Post not found'}, 404
         return make_response(jsonify(post.to_dict()), 200)
-    
+            
+    def delete(self, post_id):
+        user_id = session.get('user_id')  # Get the current user's ID
+        post = Post.query.get(post_id)
+        if not post:
+            return {'error': '404: Post not found'}, 404
+        if post.user_id != user_id:  # If the current user didn't create the post...
+            return {'error': '403: Forbidden'}, 403  # ... then they can't delete it.
+
+        # This will automatically delete associated comments if set up with cascading delete in your database.
+        db.session.delete(post)
+        db.session.commit()
+        return make_response({'message': 'Post deleted successfully'}, 200)
 
 
-api.add_resource(PostsListById, '/posts/<int:id>')
+api.add_resource(PostsListById, '/posts/<int:post_id>')
 
 
 class CommentsList(Resource):
@@ -280,18 +292,7 @@ class PostCommentsList(Resource):
 
         except Exception as e:
             return {"message": f"An error occurred: {str(e)}"}, 500
-        
-    def delete(self, post_id):
-        user_id = session.get('user_id')  # Get the current user's ID
-        comment = Comment.query.get(post_id)
-        if not comment:
-            return {'error': '404: Comment not found'}, 404
-        if comment.user_id != user_id:  # If the current user didn't create the post...
-            return {'error': '403: Forbidden'}, 403  # ... then they can't delete it.
 
-        db.session.delete(comment)
-        db.session.commit()
-        return make_response({'message': 'Comment deleted successfully'}, 200)
 
 api.add_resource(PostCommentsList, '/posts/<int:post_id>/comments')
 

@@ -1,11 +1,26 @@
-import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Footer = () => {
+
+    const location = useLocation();
+    if (location.pathname === '/') {
+        return null;
+    }
     
     return (
-        <footer className="bg-blue-500 p-4 text-center text-white fixed bottom-0 w-full">
-            © 2023 PWR Stack Lab. All rights reserved.
+        <div>
+        <header>
+          {/* Your header here */}
+        </header>
+        <main className="flex-grow">
+          {/* Your main content here */}
+        </main>
+        <footer className="bg-black p-4 text-center text-white">
+          © 2023 PWR Stack Lab. All rights reserved.
         </footer>
+      </div>
+      
+
     )
 }
 

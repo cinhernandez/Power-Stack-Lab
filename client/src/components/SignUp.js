@@ -129,7 +129,7 @@ return (
             <div className='flex flex-col items-center justify-center'></div>
             <button
             type="submit"
-            className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-red-500 to-black text-white font-semibold py-2 px-4 rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
             disabled={formik.isSubmitting}>
             Sign Up
             </button>

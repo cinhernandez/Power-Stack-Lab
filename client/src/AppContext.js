@@ -64,6 +64,7 @@ export const AppProvider = ({ children }) => {
     const [newNotes, setNewNotes] = useState('');
     const [editingLiftProgress, setEditingLiftProgress] = useState(null);
     const [newLiftProgress, setNewLiftProgress] = useState([]);
+    const [isEditingLift, setIsEditingLift] = useState(false);
     
    
 
@@ -174,6 +175,7 @@ return(
         isEditing, setIsEditing, updateMaxLift, newSquatMax, setNewSquatMax, newBenchMax, setNewBenchMax, newDeadliftMax, setNewDeadliftMax, newDate, setNewDate,
         errorMessage, setErrorMessage, newMaxLifts, setNewMaxLifts, newName, setNewName, newWeightLifted, setNewWeightLifted, newSetNumber, setNewSetNumber,
         newReps, setNewReps, newNotes, setNewNotes, updateLiftProgress, editingLiftProgress, setEditingLiftProgress, newLiftProgress, setNewLiftProgress,
+        isEditingLift, setIsEditingLift
         
     }}>
         {children}

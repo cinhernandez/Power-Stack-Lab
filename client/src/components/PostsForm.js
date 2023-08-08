@@ -48,9 +48,9 @@ const PostsForm = () => {
      
 
     return (
-        <div className="flex items-center justify-center h-screen bg-white">
-        <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg  ">
-        <h2 className="text-2xl font-bold mb-4 text-center text-black"> Create Community Post</h2>
+       
+        <div className="w-full mx-auto bg-white p-6 rounded-lg shadow-lg mt-12  ">
+        <h2 className="text-2xl font-bold mb-4 text-center text-black mt-1"> Create Community Post</h2>
         <div className="mb-4 space-y-4">
         <form onSubmit={handleSubmit}>
           <label htmlFor="title" className="block text-sm font-medium">Title:</label>
@@ -84,14 +84,14 @@ const PostsForm = () => {
     
         
           <div className='w-full border-b border-white mb-4'></div>
-          <button type="submit" className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <button type="submit" className="w-full bg-gradient-to-r from-red-500 to-black text-white font-semibold py-2 px-4 rounded hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
             Submit
           
           </button>
         </form>
         </div>
         </div>
-        </div>
+      
     )
 
     

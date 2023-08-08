@@ -56,19 +56,19 @@ with app.app_context():
         db.session.commit()
         
         # Generate posts
-        title = "lifting"
-        body = fake.paragraph()
-        date = fake.date_this_year()
-        post = Post(title=title, body=body, date=date, user_id=user.id)
-        db.session.add(post)
-        db.session.commit()
+        # title = "lifting"
+        # body = fake.paragraph()
+        # date = fake.date_this_year()
+        # post = Post(title=title, body=body, date=date, user_id=user.id)
+        # db.session.add(post)
+        # db.session.commit()
         
 
-        # Generate comments
-        body= fake.paragraph()
-        comment = Comment(body=body, user_id=user.id, post_id=post.id)
-        db.session.add(comment)
-        db.session.commit()
+        # # Generate comments
+        # body= fake.paragraph()
+        # comment = Comment(body=body, user_id=user.id, post_id=post.id)
+        # db.session.add(comment)
+        # db.session.commit()
         
 
 

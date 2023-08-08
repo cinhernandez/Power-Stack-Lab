@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import {  NavLink, Link } from 'react-router-dom';
+import Logo from '../assets/Logo.png';
 
  
 
@@ -31,20 +32,20 @@ const NavBar = () => {
 
 
     return (
-        <div className='w-full h-[90px] bg-black'>
-            <div className='max-w-[1240px] mx-auto px-4 flex justify-between items-center h-full'>
+        <div className='w-full h-[95px] bg-black'>
+            <div className='max-w-[1500px] mx-auto px-22 flex justify-between items-center h-full'>
             <div>
             <Link to='/'>
-                <h1 className='text-red-500'>PWR Stack Lab</h1>
+                <img src={Logo} alt='logo' className='h-[110px] w-[150px]' />
             </Link>
                 </div>
                 <nav>
                     <div className= 'navigation'>
-                    <ul className='flex text-white items-center'>
+                    <ul className='flex text-white items-center '>
                 {isLoggedIn && (
                     <>
                     <NavLink exact to='/generate_program'>
-                        <li>Generate Powerlifting Program</li>
+                        <li >Generate Powerlifting Program</li>
                     </NavLink>
                     
                     <NavLink className='button' exact to='/lift_sets'>
@@ -59,7 +60,7 @@ const NavBar = () => {
                         <li>Dashboard</li>
                     </NavLink>
                     <NavLink className='button' exact to='/posts'>
-                        <li>Community Posts</li>
+                        <li>Community Forum</li>
                     </NavLink>
                     {!isLoggedIn && (
                         <>
