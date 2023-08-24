@@ -66,9 +66,7 @@ export const AppProvider = ({ children }) => {
     const [newLiftProgress, setNewLiftProgress] = useState([]);
     const [isEditingLift, setIsEditingLift] = useState(false);
     
-   
 
-    
 
 
 

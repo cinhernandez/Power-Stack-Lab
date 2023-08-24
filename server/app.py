@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # Standard library imports
-from flask import Flask, request, jsonify, make_response, session
+from flask import request, jsonify, make_response, session, render_template
 # Remote library imports
 from flask import request
 from flask_migrate import Migrate
@@ -34,8 +34,9 @@ app.secret_key = environ.get('SECRET_KEY')
 api = Api(app)
 
 @app.route('/')
-def index():
-    return 'Power Stack Lab'
+@app.route('/<int:id>')
+def index(id=0):
+    return render_template("index.html")
 
 class UserList(Resource):
     def get(self):

@@ -19,9 +19,6 @@ function App() {
   const {isLoggedIn, setIsLoggedIn} = useContext(AppContext);
 
  
-  
-
- 
 
   return (
   
