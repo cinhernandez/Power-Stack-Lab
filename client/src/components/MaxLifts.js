@@ -3,7 +3,7 @@ import { AppContext } from '../AppContext';
 import UpdateMaxLifts from './UpdateMaxLifts';
 
 const MaxLifts = () => {
-    const { maxLifts, setMaxLifts, updateMaxLift, editingMaxLift, isEditing, setEditingMaxLift, setIsEditing } = useContext(AppContext);
+    const { maxLifts, setMaxLifts, isEditing, setEditingMaxLift, setIsEditing } = useContext(AppContext);
 
     useEffect(() => {
         fetch('/max_lifts')

@@ -7,12 +7,6 @@ import { AppContext } from "../AppContext";
 const Login = () => {
   const {
     setIsLoggedIn,
-    setErrors,
-    setIsSubmitting,
-    email,
-    setEmail,
-    password,
-    setPassword,
     setUser,
   } = useContext(AppContext);
 

@@ -5,7 +5,7 @@ import CommentForm from "./CommentForm";
 
 const Posts = () => {
     const { posts, setPosts, likes, setLikes, commentFormPostId, setCommentFormPostId, 
-      isLoggedIn, setPostToEdit } = useContext(AppContext);
+      isLoggedIn } = useContext(AppContext);
 
     const openCommentForm = (postId) => {
       setCommentFormPostId(postId);

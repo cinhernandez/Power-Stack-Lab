@@ -1,16 +1,15 @@
 import React from 'react';
 import 'tailwindcss/tailwind.css';
 
-import { useHistory } from 'react-router-dom';
+
 import LiftProgress from './LiftProgress';
 import MaxLifts from './MaxLifts';
 
 
 
-const Dashboard = ({user, isLoggedIn, setIsLoggedIn}) => {
+const Dashboard = () => {
 
-    
-    const history = useHistory();
+
 
     return (
         <div className="flex flex-col items-center mt-10">
